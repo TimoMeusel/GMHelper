@@ -2,17 +2,17 @@
 {
     internal class Skater : Player
     {
-        public bool IsCenter { get; set; }
-        public bool IsLeftWinger { get; set; }
-        public bool IsRightWinger { get; set; }
-        public bool IsDefender { get; set; }
-        public int Checking { get; set; }
-        public int Fighting { get; set; }
-        public int Discipline { get; set; }
-        public int FaceOff { get; set; }
-        public int Scoring { get; set; }
-        public int Defense { get; set; }
-        public int PenaltyShot { get; set; }
-        public int Experience { get; set; }
+        public bool IsCenter { get; internal set; }
+        public bool IsLeftWinger { get; internal set; }
+        public bool IsRightWinger { get; internal set; }
+        public bool IsDefender { get; internal set; }
+        public int Checking { get; internal set; }
+        public int Fighting { get; internal set; }
+        public int Discipline { get; internal set; }
+        public int FaceOff { get; internal set; }
+        public int Scoring { get; internal set; }
+        public int Defense { get; internal set; }
+        public int PenaltyShot { get; internal set; }
+        public int Experience { get; internal set; }
     }
 }

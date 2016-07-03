@@ -70,9 +70,12 @@
     </Compile>
     <Compile Include="Model\DataGrabber.cs" />
     <Compile Include="Model\Goalie.cs" />
-    <Compile Include="Model\IDataGrabber.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Skater.cs" />
+    <Compile Include="ViewModel\Players.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\TeamViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -106,9 +109,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

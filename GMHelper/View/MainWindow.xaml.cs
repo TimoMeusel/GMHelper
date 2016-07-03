@@ -11,9 +11,6 @@ namespace GM
         public MainWindow()
         {
             InitializeComponent();
-
-            var x = new DataGrabber("http://nfhl.eu.dd25712.kasserver.com/2/NFHL-ProTeamRoster.html");
-            x.Grab();
         }
     }
 }
