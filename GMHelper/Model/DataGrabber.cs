@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using System;
+using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,12 +18,9 @@ namespace GM.Model
         {
             List<Player> players = new List<Player>();
 
-            StringBuilder output = new StringBuilder();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
-
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
-
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     return null;
@@ -34,13 +32,17 @@ namespace GM.Model
                 doc.Load(receiveStream);
 
                 //Team
-                foreach (HtmlNode skaterNode in doc.DocumentNode.SelectNodes("//table[@class='basictablesorter STHSRoster_PlayersTable']/tr"))
+                foreach (
+                    HtmlNode skaterNode in
+                        doc.DocumentNode.SelectNodes("//table[@class='basictablesorter STHSRoster_PlayersTable']/tr"))
                 {
                     Skater skater = CreateSkater(skaterNode);
                     players.Add(skater);
                 }
 
-                foreach (HtmlNode goalieNode in doc.DocumentNode.SelectNodes("//table[@class='basictablesorter STHSRoster_GoaliesTable']/tr"))
+                foreach (
+                    HtmlNode goalieNode in
+                        doc.DocumentNode.SelectNodes("//table[@class='basictablesorter STHSRoster_GoaliesTable']/tr"))
                 {
                     Goalie goalie = CreateGoalie(goalieNode);
                     players.Add(goalie);
@@ -48,7 +50,6 @@ namespace GM.Model
 
                 response.Close();
             }
-
             return players;
         }
 
@@ -100,7 +101,7 @@ namespace GM.Model
             goalie.PuckHandling = value;
 
             int.TryParse(goalieNode.SelectSingleNode("td[15]").InnerHtml, out value);
-            goalie.Passing = value;
+            goalie.PenaltyShot = value;
 
             int.TryParse(goalieNode.SelectSingleNode("td[16]").InnerHtml, out value);
             goalie.Leadership = value;

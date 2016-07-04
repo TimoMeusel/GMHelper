@@ -14,7 +14,7 @@ namespace GM.Model
         public int Strength { get; internal set; }
         public int Endurance { get; internal set; }
         public int PuckHandling { get; internal set; }
-        public int Passing { get; internal set; }
+        public int PenaltyShot { get; internal set; }
         public int Durability { get; internal set; }
         public int Leadership { get; internal set; }
         public int Morale { get; internal set; }

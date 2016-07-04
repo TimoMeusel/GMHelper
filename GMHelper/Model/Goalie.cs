@@ -1,6 +1,6 @@
 ﻿namespace GM.Model
 {
-    internal class Goalie : Player
+    public class Goalie : Player
     {
         public int Size { get; internal set; }
         public int Agility { get; internal set; }

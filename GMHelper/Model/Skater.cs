@@ -1,6 +1,6 @@
 ﻿namespace GM.Model
 {
-    internal class Skater : Player
+    public class Skater : Player
     {
         public bool IsCenter { get; internal set; }
         public bool IsLeftWinger { get; internal set; }
@@ -12,7 +12,7 @@
         public int FaceOff { get; internal set; }
         public int Scoring { get; internal set; }
         public int Defense { get; internal set; }
-        public int PenaltyShot { get; internal set; }
+        public int Passing { get; internal set; }
         public int Experience { get; internal set; }
     }
 }
