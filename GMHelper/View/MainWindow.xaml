@@ -9,126 +9,139 @@
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <ListView x:Name="TeamList" 
+    <DockPanel LastChildFill="True">
+        <Menu  DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Grab Data"
+                          Command="{Binding GrabCommand}"/>
+                <MenuItem Header="Load from File"/>
+                <MenuItem Header="Save to File"/>
+            </MenuItem>
+        </Menu>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="TeamList" 
                   ItemsSource="{Binding Teams}" 
                   DisplayMemberPath="TeamName" 
                   Grid.Column="0" 
                   SelectedIndex="0"/>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <DataGrid  Grid.Row="0" 
-                       ItemsSource="{Binding ElementName=TeamList, Path=SelectedValue.Skaters}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name"
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <DataGrid  Grid.Row="0" 
+                           AutoGenerateColumns="False"
+                           ItemsSource="{Binding ElementName=TeamList, Path=SelectedValue.Skaters}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name, Mode=OneWay}"/>
-                    <DataGridCheckBoxColumn Header="C"
+                        <DataGridCheckBoxColumn Header="C"
                                         Binding="{Binding IsCenter, Mode=OneWay}"/>
-                    <DataGridCheckBoxColumn Header="RW"
+                        <DataGridCheckBoxColumn Header="RW"
                                         Binding="{Binding IsRightWinger, Mode=OneWay}"/>
-                    <DataGridCheckBoxColumn Header="LW"
+                        <DataGridCheckBoxColumn Header="LW"
                                         Binding="{Binding IsLeftWinger, Mode=OneWay}"/>
-                    <DataGridCheckBoxColumn Header="D"
+                        <DataGridCheckBoxColumn Header="D"
                                         Binding="{Binding IsDefender, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Condition"
+                        <DataGridTextColumn Header="Condition"
                                         Binding="{Binding Condition, Mode=OneWay}"/>
-                    <DataGridCheckBoxColumn Header="Injured"
+                        <DataGridCheckBoxColumn Header="Injured"
                                         Binding="{Binding IsInjured, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Checking"
+                        <DataGridTextColumn Header="Checking"
                                         Binding="{Binding Checking, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Fighting"
+                        <DataGridTextColumn Header="Fighting"
                                         Binding="{Binding Fighting, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Discipline"
+                        <DataGridTextColumn Header="Discipline"
                                         Binding="{Binding Discipline, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Skating"
+                        <DataGridTextColumn Header="Skating"
                                         Binding="{Binding Skating, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Strength"
+                        <DataGridTextColumn Header="Strength"
                                         Binding="{Binding Strength, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Endurance"
+                        <DataGridTextColumn Header="Endurance"
                                         Binding="{Binding Endurance, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Durability"
+                        <DataGridTextColumn Header="Durability"
                                         Binding="{Binding Durability, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="PuckHandling"
+                        <DataGridTextColumn Header="PuckHandling"
                                         Binding="{Binding PuckHandling, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="FaceOff"
+                        <DataGridTextColumn Header="FaceOff"
                                         Binding="{Binding FaceOff, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Passing"
+                        <DataGridTextColumn Header="Passing"
                                         Binding="{Binding Passing, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Scoring"
+                        <DataGridTextColumn Header="Scoring"
                                         Binding="{Binding Scoring, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Defense"
+                        <DataGridTextColumn Header="Defense"
                                         Binding="{Binding Defense, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="PenaltyShot"
+                        <DataGridTextColumn Header="PenaltyShot"
                                         Binding="{Binding PenaltyShot, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Experience"
+                        <DataGridTextColumn Header="Experience"
                                         Binding="{Binding Experience, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Leadership"
+                        <DataGridTextColumn Header="Leadership"
                                         Binding="{Binding Leadership, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Morale"
+                        <DataGridTextColumn Header="Morale"
                                         Binding="{Binding Morale, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Age"
+                        <DataGridTextColumn Header="Age"
                                         Binding="{Binding Age, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Contract"
+                        <DataGridTextColumn Header="Contract"
                                         Binding="{Binding Contract, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Salary"
+                        <DataGridTextColumn Header="Salary"
                                         Binding="{Binding Salary, Mode=OneWay}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <DataGrid  Grid.Row="1" 
-                       ItemsSource="{Binding ElementName=TeamList, Path=SelectedValue.Goalies}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name"
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid  Grid.Row="1" 
+                           AutoGenerateColumns="False"
+                           ItemsSource="{Binding ElementName=TeamList, Path=SelectedValue.Goalies}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"
                                         Binding="{Binding Name, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Condition"
+                        <DataGridTextColumn Header="Condition"
                                         Binding="{Binding Condition, Mode=OneWay}"/>
-                    <DataGridCheckBoxColumn Header="Injured"
+                        <DataGridCheckBoxColumn Header="Injured"
                                         Binding="{Binding IsInjured, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Skating"
+                        <DataGridTextColumn Header="Skating"
                                         Binding="{Binding Skating, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Strength"
+                        <DataGridTextColumn Header="Strength"
                                         Binding="{Binding Strength, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Endurance"
+                        <DataGridTextColumn Header="Endurance"
                                         Binding="{Binding Endurance, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Durability"
+                        <DataGridTextColumn Header="Durability"
                                         Binding="{Binding Durability, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Size"
+                        <DataGridTextColumn Header="Size"
                                         Binding="{Binding Size, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Agility"
+                        <DataGridTextColumn Header="Agility"
                                         Binding="{Binding Agility, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Rebound"
+                        <DataGridTextColumn Header="Rebound"
                                         Binding="{Binding Rebound   , Mode=OneWay}"/>
-                    <DataGridTextColumn Header="StyleControl"
+                        <DataGridTextColumn Header="StyleControl"
                                         Binding="{Binding StyleControl, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="HandSpeed"
+                        <DataGridTextColumn Header="HandSpeed"
                                         Binding="{Binding HandSpeed, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="ReactionTime"
+                        <DataGridTextColumn Header="ReactionTime"
                                         Binding="{Binding ReactionTime, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="PuckHandling"
+                        <DataGridTextColumn Header="PuckHandling"
                                         Binding="{Binding PuckHandling, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="PenaltyShot"
+                        <DataGridTextColumn Header="PenaltyShot"
                                         Binding="{Binding PenaltyShot, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Experience"
+                        <DataGridTextColumn Header="Experience"
                                         Binding="{Binding Experience, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Leadership"
+                        <DataGridTextColumn Header="Leadership"
                                         Binding="{Binding Leadership, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Morale"
+                        <DataGridTextColumn Header="Morale"
                                         Binding="{Binding Morale, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Age"
+                        <DataGridTextColumn Header="Age"
                                         Binding="{Binding Age, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Contract"
+                        <DataGridTextColumn Header="Contract"
                                         Binding="{Binding Contract, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Salary"
+                        <DataGridTextColumn Header="Salary"
                                         Binding="{Binding Salary, Mode=OneWay}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Grid>
-        
-    </Grid>
+    </DockPanel>
+    
 </Window>

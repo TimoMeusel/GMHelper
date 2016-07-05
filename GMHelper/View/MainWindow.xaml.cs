@@ -1,5 +1,4 @@
-﻿using GM.Model;
-using System.Windows;
+﻿using System.Windows;
 
 namespace GM
 {

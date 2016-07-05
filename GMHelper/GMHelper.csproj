@@ -72,6 +72,9 @@
     <Compile Include="Model\Goalie.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Skater.cs" />
+    <Compile Include="Model\Team.cs" />
+    <Compile Include="ViewModel\BaseCommand.cs" />
+    <Compile Include="ViewModel\GrabCommand.cs" />
     <Compile Include="ViewModel\Players.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
