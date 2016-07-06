@@ -60,6 +60,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\AllGoaliesOverviewViewModel.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="View\TeamsView.xaml.cs">
+      <DependentUpon>TeamsView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\DataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,16 +82,22 @@
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Skater.cs" />
     <Compile Include="Model\Team.cs" />
+    <Compile Include="ViewModel\AllSkatersOverviewViewModel.cs" />
     <Compile Include="ViewModel\BaseCommand.cs" />
     <Compile Include="ViewModel\GrabCommand.cs" />
-    <Compile Include="ViewModel\Players.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\TeamRegistry.cs" />
+    <Compile Include="ViewModel\TeamsOverviewViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\TeamsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

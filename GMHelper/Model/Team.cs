@@ -6,12 +6,25 @@
     /// </summary>
     public class Team
     {
+        private static Team _noTeam;
+
         public Team (string name, bool isPro)
         {
             Name = name;
             IsPro = isPro;
-        } 
+        }
 
+        public static Team NoTeam
+        {
+            get
+            {
+                if (_noTeam == null)
+                {
+                    _noTeam = new Team("-", false);
+                }
+                return _noTeam;
+            }
+        }
         /// <summary>
         ///     The name of the team
         /// </summary>

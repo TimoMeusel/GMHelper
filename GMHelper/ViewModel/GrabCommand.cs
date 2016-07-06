@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using GM.Model;
 
 namespace GM.ViewModel
@@ -35,43 +34,29 @@ namespace GM.ViewModel
         /// </summary>
         public override void Execute (object parameter)
         {
+            var currentCursor = Mouse.OverrideCursor;
             try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 // load the players from the website
                 var players =
                     new ObservableCollection<Player>(
                         DataGrabber.GrabPlayers());
 
-                var teams = SetUpTeams(players);
-                _mainWindowViewModel.Teams = teams;
+                var teamRegistry = new TeamRegistry();
+                var teams = teamRegistry.CreateTeams(players);
+                _mainWindowViewModel.TeamsOverviewViewModel.Teams = teams;
+                _mainWindowViewModel.AllSkatersOverviewViewModel.Skaters = teamRegistry.AllSkaters;
+                _mainWindowViewModel.AllGoaliesOverviewViewModel.Goalies = teamRegistry.AllGoalies;
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message + Environment.NewLine + e.StackTrace);
             }
-        }
-
-        private static List<TeamViewModel> SetUpTeams (ObservableCollection<Player> players)
-        {
-            Dictionary<Player, Team> teamMap = new Dictionary<Player, Team>();
-            foreach (Player player in players)
+            finally
             {
-                teamMap.Add(player, player.Team);
+                Mouse.OverrideCursor = currentCursor;
             }
-
-            List<Team> teams = teamMap.Select(p => p.Value).Distinct().ToList();
-            List<TeamViewModel> teamsViewModels = new List<TeamViewModel>();
-
-            foreach (var team in teams)
-            {
-                List<Skater> skaters =
-                    teamMap.Where(t => t.Value.Equals(team)).Where(t => t.Key is Skater).Select(t => t.Key).Cast<Skater>().ToList();
-                List<Goalie> goalies =
-                    teamMap.Where(t => t.Value.Equals(team)).Where(t => t.Key is Goalie).Select(t => t.Key).Cast<Goalie>().ToList();
-
-                teamsViewModels.Add(new TeamViewModel(team, skaters, goalies));
-            }
-            return teamsViewModels;
         }
     }
 }
