@@ -15,10 +15,17 @@
                       MinWidth="100"/>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <DataGrid  Grid.Row="0" 
+                <TextBlock DataContext="{Binding ElementName=TeamList, Path=SelectedValue}"
+                           Text="{Binding HeaderText}"
+                           TextAlignment="Center"
+                           FontSize="12"
+                           FontWeight="Bold"
+                           Background="{x:Static SystemColors.ControlDarkBrush}"/>    
+                <DataGrid  Grid.Row="1" 
                            AutoGenerateColumns="False"
                            ItemsSource="{Binding ElementName=TeamList, Path=SelectedValue.Skaters}">
                     <DataGrid.Columns>
@@ -76,7 +83,7 @@
                                         Binding="{Binding Salary, Mode=OneWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid  Grid.Row="1" 
+                <DataGrid  Grid.Row="2" 
                            AutoGenerateColumns="False"
                            ItemsSource="{Binding ElementName=TeamList, Path=SelectedValue.Goalies}"
                            MinHeight="100">

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,52 +29,57 @@ namespace GM.Model
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Address);
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
-                if (response.StatusCode != HttpStatusCode.OK)
+                try
                 {
-                    return null;
-                }
-
-                // Fetch html document
-                Stream receiveStream = response.GetResponseStream();
-                HtmlDocument doc = new HtmlDocument();
-                doc.Load(receiveStream);
-
-
-                List<string> skaterHeaders = new List<string>();
-                foreach ( HtmlNode skaterHeaderNode in doc.DocumentNode.SelectNodes(XPathForSkaterHeaders) )
-                {
-                    if (skaterHeaders.Contains(skaterHeaderNode.InnerHtml))
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        break;
+                        return null;
                     }
-                    skaterHeaders.Add(skaterHeaderNode.InnerHtml);
-                }
 
-                List<string> goalieHeaders = new List<string>();
-                foreach ( HtmlNode goalieHeaderNode in doc.DocumentNode.SelectNodes(XPathForGoalieHeaders) )
-                {
-                    if ( goalieHeaders.Contains(goalieHeaderNode.InnerHtml) )
+                    // Fetch html document
+                    Stream receiveStream = response.GetResponseStream();
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.Load(receiveStream);
+
+
+                    List<string> skaterHeaders = new List<string>();
+                    foreach (HtmlNode skaterHeaderNode in doc.DocumentNode.SelectNodes(XPathForSkaterHeaders))
                     {
-                        break;
+                        if (skaterHeaders.Contains(skaterHeaderNode.InnerHtml))
+                        {
+                            break;
+                        }
+                        skaterHeaders.Add(skaterHeaderNode.InnerHtml);
                     }
-                    goalieHeaders.Add(goalieHeaderNode.InnerHtml);
-                }
 
-                // create skater list
-                foreach (HtmlNode skaterNode in doc.DocumentNode.SelectNodes(XPathForSkaters))
+                    List<string> goalieHeaders = new List<string>();
+                    foreach (HtmlNode goalieHeaderNode in doc.DocumentNode.SelectNodes(XPathForGoalieHeaders))
+                    {
+                        if (goalieHeaders.Contains(goalieHeaderNode.InnerHtml))
+                        {
+                            break;
+                        }
+                        goalieHeaders.Add(goalieHeaderNode.InnerHtml);
+                    }
+
+                    // create skater list
+                    foreach (HtmlNode skaterNode in doc.DocumentNode.SelectNodes(XPathForSkaters))
+                    {
+                        Skater skater = CreateSkater(skaterHeaders, skaterNode);
+                        players.Add(skater);
+                    }
+
+                    // create goalie list
+                    foreach (HtmlNode goalieNode in doc.DocumentNode.SelectNodes(XPathForGoalies))
+                    {
+                        Goalie goalie = CreateGoalie(goalieHeaders, goalieNode);
+                        players.Add(goalie);
+                    }
+                }
+                finally
                 {
-                    Skater skater = CreateSkater(skaterHeaders, skaterNode);
-                    players.Add(skater);
+                    response.Close();
                 }
-
-                // create goalie list
-                foreach (HtmlNode goalieNode in doc.DocumentNode.SelectNodes(XPathForGoalies))
-                {
-                    Goalie goalie = CreateGoalie(goalieHeaders, goalieNode);
-                    players.Add(goalie);
-                }
-
-                response.Close();
             }
 
             return players;
@@ -113,12 +119,28 @@ namespace GM.Model
             string teamName = divNode.Attributes["id"].Value.Split('_').Last();
             var header = divNode.SelectSingleNode("h2");
             bool isPro = false;
+
             if (header != null)
             {
                 isPro = header.InnerHtml.Contains("Pro");
             }
-            Team team = new Team(teamName, isPro);
-            return team;
+
+            if (isPro)
+            {
+                return new Team(teamName);
+            }
+            else
+            {
+                var parent = goalieNode.SelectNodes("parent::*").Single();
+                var grandParent = parent.SelectNodes("parent::*").Single();
+                var proTeamNode = grandParent.SelectNodes("preceding-sibling::h1").Last();
+
+                string proTeamName = proTeamNode.InnerText;
+
+                Console.WriteLine(teamName + " - " + proTeamName);
+
+                return new FarmTeam(teamName, new Team(proTeamName));
+            }
         }
 
         #endregion

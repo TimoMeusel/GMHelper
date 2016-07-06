@@ -2,16 +2,15 @@
 {
 
     /// <summary>
-    /// Represents a Team
+    /// Represents a general team
     /// </summary>
     public class Team
     {
         private static Team _noTeam;
 
-        public Team (string name, bool isPro)
+        public Team (string name)
         {
             Name = name;
-            IsPro = isPro;
         }
 
         public static Team NoTeam
@@ -20,7 +19,7 @@
             {
                 if (_noTeam == null)
                 {
-                    _noTeam = new Team("-", false);
+                    _noTeam = new Team("-");
                 }
                 return _noTeam;
             }
@@ -30,11 +29,6 @@
         /// </summary>
         public string Name { get; }
 
-        /// <summary>
-        ///     Indicator whether the team is pro or farmteam
-        /// </summary>
-        public bool IsPro { get; }
-
         public override bool Equals (object obj)
         {
             var team = obj as Team;
@@ -43,12 +37,12 @@
                 return false;
             }
 
-            return Name == team.Name && IsPro == team.IsPro;
+            return Name == team.Name;
         }
 
         public override int GetHashCode ()
         {
-            return Name.GetHashCode() * IsPro.GetHashCode();
+            return Name.GetHashCode();
         }
     }
 }

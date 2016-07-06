@@ -45,7 +45,7 @@ namespace GM.ViewModel
 
         private void ShowFarmTeams(object o)
         {
-            TeamsOverviewViewModel.ShowPro = true;
+            TeamsOverviewViewModel.ShowPro = false;
             Current = TeamsOverviewViewModel;
         }
 

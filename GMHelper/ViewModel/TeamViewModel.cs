@@ -1,30 +1,50 @@
-﻿using GM.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using GM.Model;
 
 namespace GM.ViewModel
 {
     /// <summary>
     ///     Represents a team
     /// </summary>
-    public class TeamViewModel
+    public class TeamViewModel: ViewModelBase
     {
+        private readonly Team _team;
+
         /// <summary>
         ///     Instantiates a team with
         /// </summary>
         public TeamViewModel(Team team, IEnumerable<Skater> skaters, IEnumerable<Goalie> goalies)
         {
-            TeamName = team.Name;
-            IsPro = team.IsPro;
+            _team = team;
             Skaters = new ObservableCollection<Skater>(skaters);
             Goalies = new ObservableCollection<Goalie>(goalies);
+            IsPro = !(team is FarmTeam);
+            
+            OnPropertyChanged("HeaderText");
+        }
+
+        public string HeaderText
+        {
+            get
+            {
+                string headerText = TeamName;
+                if (!IsPro)
+                {
+                    headerText += " - " + ((FarmTeam)_team).ProTeam.Name;
+                }
+                return headerText;
+            }
         }
 
         /// <summary>
         ///     The name of the team
         /// </summary>
-        public string TeamName { get; }
-        
+        public string TeamName
+        {
+            get { return _team.Name; }
+        }
+
         /// <summary>
         ///     Indicator whether team is pro or farm
         /// </summary>
