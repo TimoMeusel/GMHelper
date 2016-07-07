@@ -12,10 +12,8 @@ namespace GM.Model
         ///     Creates a goalie representation based on a ordered list of values
         /// </summary>
         /// <param name="values"></param>
-        public Goalie (Team team, Dictionary<string, string> values)
+        public Goalie (Team team, Dictionary<string, string> values):base(team, values)
         {
-            Team = team;
-
             Name = values["Goalie Name"];
             
             double condition;

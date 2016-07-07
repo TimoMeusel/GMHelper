@@ -32,9 +32,8 @@ namespace GM.ViewModel
         /// <summary>
         ///     Overrides <see cref="BaseCommand.Execute"/>
         /// </summary>
-        public override void Execute (object parameter)
+        protected override void ExecuteInternal (object parameter)
         {
-            var currentCursor = Mouse.OverrideCursor;
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -52,10 +51,6 @@ namespace GM.ViewModel
             catch (Exception e)
             {
                 MessageBox.Show(e.Message + Environment.NewLine + e.StackTrace);
-            }
-            finally
-            {
-                Mouse.OverrideCursor = currentCursor;
             }
         }
     }

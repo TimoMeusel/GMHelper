@@ -5,10 +5,8 @@ namespace GM.Model
 {
     public class Skater : Player
     {
-        public Skater (Team team, Dictionary<string, string> values)
+        public Skater (Team team, Dictionary<string, string> values) : base(team, values)
         {
-            Team = team;
-
             Name = values["Player Name"];
             IsCenter = !string.IsNullOrWhiteSpace(values["C"]);
             IsLeftWinger = !string.IsNullOrWhiteSpace(values["L"]);

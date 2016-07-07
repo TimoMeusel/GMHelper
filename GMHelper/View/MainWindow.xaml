@@ -15,8 +15,9 @@
                           Command="{Binding GrabCommand}"/>
                 <MenuItem Header="Load from File"
                           IsEnabled="False"/>
-                <MenuItem Header="Save to File"
-                          IsEnabled="False"/>
+                <MenuItem Header="Export to Excel..."
+                          Command="{Binding ExcelExportCommand}"
+                          CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="Show">
                 <MenuItem Header="All Players"

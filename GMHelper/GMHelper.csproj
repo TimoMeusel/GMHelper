@@ -40,6 +40,9 @@
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.4\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -61,7 +64,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\FarmTeam.cs" />
+    <Compile Include="Persistence\ExcelExport.cs" />
     <Compile Include="ViewModel\AllGoaliesOverviewViewModel.cs" />
+    <Compile Include="ViewModel\ExcelExportCommand.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Page Include="View\DataTemplates.xaml">
       <SubType>Designer</SubType>

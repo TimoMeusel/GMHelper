@@ -25,9 +25,24 @@ namespace GM.ViewModel
         /// <summary>
         ///     Executes the command
         /// </summary>
-        public virtual void Execute (object parameter)
+        public void Execute (object parameter)
         {
-            throw new NotImplementedException();
+            var currentCursor = Mouse.OverrideCursor;
+
+            try
+            {
+                ExecuteInternal(parameter);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = currentCursor;
+            }
+
+        }
+
+        protected virtual void ExecuteInternal (object parameter)
+        {
+            
         }
 
         /// <summary>

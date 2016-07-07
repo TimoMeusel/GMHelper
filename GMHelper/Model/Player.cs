@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GM.Model
 {
@@ -8,6 +9,14 @@ namespace GM.Model
     [DebuggerDisplay("{Name} - {Team}")]
     public abstract class Player
     {
+        public Player (Team team, Dictionary<string, string> values)
+        {
+            Team = team;
+            Values = values;
+        }
+
+        public Dictionary<string, string> Values { get; protected set; }
+
         /// <summary>
         ///     The player's name
         /// </summary>

@@ -12,6 +12,7 @@ namespace GM.ViewModel
             AllSkatersOverviewViewModel = new AllSkatersOverviewViewModel();
             AllGoaliesOverviewViewModel = new AllGoaliesOverviewViewModel();
             GrabCommand = new GrabCommand(this);
+            ExcelExportCommand = new ExcelExportCommand();
 
             ShowAllSkatersCommand = new RelayCommand(o => Current = AllSkatersOverviewViewModel);
             ShowAllGoaliesCommand = new RelayCommand(o => Current = AllGoaliesOverviewViewModel);
@@ -22,6 +23,7 @@ namespace GM.ViewModel
         }
 
         public ICommand GrabCommand { get; private set; }
+        public ICommand ExcelExportCommand { get; private set; }
         public ICommand ShowProTeamsCommand { get; private set; }
         public ICommand ShowFarmTeamsCommand { get; private set; }
         public ICommand ShowAllSkatersCommand { get; private set; }
