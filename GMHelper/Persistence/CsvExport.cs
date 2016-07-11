@@ -13,12 +13,14 @@ namespace GM.Persistence
             StringBuilder builder = new StringBuilder();
 
             List<string> headers = players.First().Values.Keys.ToList();
+            headers.Add("Team");
+
             var header = string.Join("\t", headers);
             builder.AppendLine(header);
             
             foreach (var player in players)
             {
-                var line = string.Join("\t", player.Values.Values);
+                var line = string.Join("\t", player.Values.Values.Concat(new[] { player.Team.Name }));
                 builder.AppendLine(line);
             }
 

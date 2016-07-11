@@ -64,11 +64,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\FarmTeam.cs" />
+    <Compile Include="Persistence\CsvImport.cs" />
     <Compile Include="Persistence\ExcelExport.cs" />
     <Compile Include="Persistence\CsvExport.cs" />
     <Compile Include="Persistence\IExport.cs" />
     <Compile Include="ViewModel\AllGoaliesOverviewViewModel.cs" />
     <Compile Include="ViewModel\CsvExportCommand.cs" />
+    <Compile Include="ViewModel\CsvImportCommand.cs" />
     <Compile Include="ViewModel\ExcelExportCommand.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Page Include="View\DataTemplates.xaml">

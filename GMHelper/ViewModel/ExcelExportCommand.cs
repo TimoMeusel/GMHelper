@@ -30,6 +30,8 @@ namespace GM.ViewModel
             ExcelExport export = new ExcelExport();
             
             var dialog = new SaveFileDialog();
+            dialog.Filter = "*Excel|*.xlsx";
+
 
             // if cancel has been pressed, the dialog returns false
             if (dialog.ShowDialog() == false)

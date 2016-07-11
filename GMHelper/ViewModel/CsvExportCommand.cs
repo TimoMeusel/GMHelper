@@ -28,6 +28,7 @@ namespace GM.ViewModel
             CsvExport export = new CsvExport();
 
             var dialog = new SaveFileDialog();
+            dialog.Filter = "*CSV|*.csv";
 
             // if cancel has been pressed, the dialog returns false
             if ( dialog.ShowDialog() == false )

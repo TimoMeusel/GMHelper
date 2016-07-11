@@ -25,17 +25,19 @@ namespace GM.Persistence
                     myExcelWorkSheet.Cells[1, h] = headers[h-1];
                 }
 
-                Parallel.For(0,
-                             players.Count,
-                             p =>
-                             {
-                                 Parallel.For(0,
-                                              players[p].Values.Count,
-                                              v =>
-                                              {
-                                                  myExcelWorkSheet.Cells[p + 2, v + 1] = players[p].Values[headers[v]];
-                                              });
-                             });
+                for (int p = 0; p < players.Count; p++)
+                {
+                    for (int v = 0; v < players[p].Values.Count; v++)
+                    {
+                        myExcelWorkSheet.Cells[p + 2, v + 1] = players[p].Values[headers[v]];
+                    }
+                }
+
+                myExcelWorkSheet.Cells[1, players.Count + 1] = "Team";
+                for (var p = 0; p < players.Count; p++)
+                {
+                    myExcelWorkSheet.Cells[p+2, headers.Count+1] = players[p].Team.Name;
+                }
 
                 myExcelWorkbook.Close(true, path, System.Reflection.Missing.Value);
 
