@@ -4,11 +4,9 @@ using Microsoft.Win32;
 
 namespace GM.ViewModel
 {
-    /// <summary>
-    ///     http://christian.bloggingon.net/archive/2008/09/05/exceldateien-mit-c-erstellen.aspx
-    /// </summary>
-    public class ExcelExportCommand: BaseCommand
+    public class CsvExportCommand: BaseCommand
     {
+
         /// <summary>
         ///     Overrides <see cref="BaseCommand.CanExecute"/>
         /// </summary>
@@ -22,17 +20,17 @@ namespace GM.ViewModel
         /// <summary>
         ///     Overrides <see cref="BaseCommand.Execute"/>
         /// </summary>
-        protected override void ExecuteInternal (object parameter)
+        protected override void ExecuteInternal(object parameter)
         {
             var viewModel = parameter as MainWindowViewModel;
             var players = viewModel?.AllSkatersOverviewViewModel?.Skaters;
 
-            ExcelExport export = new ExcelExport();
-            
+            CsvExport export = new CsvExport();
+
             var dialog = new SaveFileDialog();
 
             // if cancel has been pressed, the dialog returns false
-            if (dialog.ShowDialog() == false)
+            if ( dialog.ShowDialog() == false )
             {
                 return;
             }

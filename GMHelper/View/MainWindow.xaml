@@ -15,8 +15,11 @@
                           Command="{Binding GrabCommand}"/>
                 <MenuItem Header="Load from File"
                           IsEnabled="False"/>
-                <MenuItem Header="Export to Excel..."
+                <MenuItem Header="Excel Export (long) ..."
                           Command="{Binding ExcelExportCommand}"
+                          CommandParameter="{Binding}"/>
+                <MenuItem Header="CSV Export (quick) ..."
+                          Command="{Binding CsvExportCommand}"
                           CommandParameter="{Binding}"/>
             </MenuItem>
             <MenuItem Header="Show">

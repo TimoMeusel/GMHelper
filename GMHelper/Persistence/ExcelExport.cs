@@ -6,7 +6,7 @@ using Microsoft.Office.Interop.Excel;
 
 namespace GM.Persistence
 {
-    public class ExcelExport
+    public class ExcelExport: IExport
     {
         public void Export (List<Skater> players, string path)
         {
@@ -36,13 +36,6 @@ namespace GM.Persistence
                                                   myExcelWorkSheet.Cells[p + 2, v + 1] = players[p].Values[headers[v]];
                                               });
                              });
-                //for (int p = 0; p < players.Count(); p++)
-                //{
-                //    for (int v = 0; v < players[p].Values.Count; v++)
-                //    {
-                //        myExcelWorkSheet.Cells[p+2, v+1] = players[p].Values[headers[v]];
-                //    }
-                //}
 
                 myExcelWorkbook.Close(true, path, System.Reflection.Missing.Value);
 
