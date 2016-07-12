@@ -28,7 +28,6 @@ namespace GM.ViewModel
             var csvImport = new CsvImport();
             var skaters = csvImport.Load(path);
 
-            //viewModel.AllSkatersOverviewViewModel = new AllSkatersOverviewViewModel();
             viewModel.AllSkatersOverviewViewModel.Skaters = skaters;
         }
     }

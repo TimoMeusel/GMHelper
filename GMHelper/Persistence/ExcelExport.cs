@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 using GM.Model;
 using Microsoft.Office.Interop.Excel;
 
 namespace GM.Persistence
 {
-    public class ExcelExport: IExport
+    public class ExcelExport
     {
         public void Export (List<Skater> players, string path)
         {
@@ -16,7 +16,7 @@ namespace GM.Persistence
             {
                 myExcelApplication = new  Application();
 
-                var myExcelWorkbook = myExcelApplication.Workbooks.Add(System.Reflection.Missing.Value);
+                var myExcelWorkbook = myExcelApplication.Workbooks.Add(Missing.Value);
                 var myExcelWorkSheet = (Worksheet ) myExcelWorkbook.ActiveSheet;
 
                 List<string> headers = players.First().Values.Keys.ToList();
@@ -39,7 +39,7 @@ namespace GM.Persistence
                     myExcelWorkSheet.Cells[p+2, headers.Count+1] = players[p].Team.Name;
                 }
 
-                myExcelWorkbook.Close(true, path, System.Reflection.Missing.Value);
+                myExcelWorkbook.Close(true, path, Missing.Value);
 
             }
             finally

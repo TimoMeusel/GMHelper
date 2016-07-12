@@ -23,8 +23,6 @@ namespace GM.ViewModel
         protected override void ExecuteInternal(object parameter)
         {
             var viewModel = parameter as MainWindowViewModel;
-            var players = viewModel?.AllSkatersOverviewViewModel?.Skaters;
-
             CsvExport export = new CsvExport();
 
             var dialog = new SaveFileDialog();
@@ -37,7 +35,8 @@ namespace GM.ViewModel
             }
 
             string path = dialog.FileName;
-            export.Export(players.ToList(), path);
+
+            export.Export(viewModel, path);
         }
     }
 }

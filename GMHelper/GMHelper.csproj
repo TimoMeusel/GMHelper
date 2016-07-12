@@ -67,7 +67,6 @@
     <Compile Include="Persistence\CsvImport.cs" />
     <Compile Include="Persistence\ExcelExport.cs" />
     <Compile Include="Persistence\CsvExport.cs" />
-    <Compile Include="Persistence\IExport.cs" />
     <Compile Include="ViewModel\AllGoaliesOverviewViewModel.cs" />
     <Compile Include="ViewModel\CsvExportCommand.cs" />
     <Compile Include="ViewModel\CsvImportCommand.cs" />
