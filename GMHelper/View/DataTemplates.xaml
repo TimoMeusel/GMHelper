@@ -143,6 +143,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
                                     Binding="{Binding Name, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Team"
+                                            Binding="{Binding Team.Name, Mode=OneWay}"/>
                     <DataGridCheckBoxColumn Header="C"
                                     Binding="{Binding IsCenter, Mode=OneWay}"/>
                     <DataGridCheckBoxColumn Header="RW"
@@ -205,6 +207,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name"
                                     Binding="{Binding Name, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Team"
+                                            Binding="{Binding Team.Name, Mode=OneWay}"/>
                     <DataGridTextColumn Header="Condition"
                                     Binding="{Binding Condition, Mode=OneWay}"/>
                     <DataGridCheckBoxColumn Header="Injured"
