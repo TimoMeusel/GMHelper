@@ -26,9 +26,14 @@ namespace GM.ViewModel
             string path = dialog.FileName;
 
             var csvImport = new CsvImport();
-            var skaters = csvImport.Load(path);
+            var players = csvImport.Load(path);
 
-            viewModel.AllSkatersOverviewViewModel.Skaters = skaters;
+
+            var teamRegistry = new TeamRegistry();
+            var teams = teamRegistry.CreateTeams(players);
+            viewModel.TeamsOverviewViewModel.Teams = teams;
+            viewModel.AllSkatersOverviewViewModel.Skaters = teamRegistry.AllSkaters;
+            viewModel.AllGoaliesOverviewViewModel.Goalies = teamRegistry.AllGoalies;
         }
     }
 }

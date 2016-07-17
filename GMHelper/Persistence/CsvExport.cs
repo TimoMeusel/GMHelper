@@ -57,7 +57,9 @@ namespace GM.Persistence
 
             foreach (var skater in allSkaters)
             {
-                var line = string.Join("\t", skater.Values.Values.Concat(new[] { skater.Team.Name }).Skip(1));
+                string teamDisplay = GenerateTeamDisplay(skater);
+
+                var line = string.Join("\t", skater.Values.Values.Concat(new[] { teamDisplay }).Skip(1));
                 builder.AppendLine(line);
             }
             return builder.ToString();
@@ -74,7 +76,9 @@ namespace GM.Persistence
 
             foreach (var goalie in allGoalies)
             {
-                var line = string.Join("\t", goalie.Values.Values.Concat(new[] { goalie.Team.Name }));
+                string teamDisplay = GenerateTeamDisplay(goalie);
+
+                var line = string.Join("\t", goalie.Values.Values.Concat(new[] { teamDisplay }));
                 builder.AppendLine(line);
             }
             return builder.ToString();
@@ -101,5 +105,21 @@ namespace GM.Persistence
             }
             return teamBuilder.ToString();
         }
+
+        private static string GenerateTeamDisplay(Player player)
+        {
+            var teamDisplay = string.Empty;
+            var farmTeam = player.Team as FarmTeam;
+            if ( farmTeam != null )
+            {
+                teamDisplay = farmTeam.Name + " - " + farmTeam.ProTeam.Name;
+            }
+            else
+            {
+                teamDisplay = player.Team.Name;
+            }
+            return teamDisplay;
+        }
+
     }
 }
