@@ -14,15 +14,9 @@
                 <MenuItem Header="Grab Data"
                           Command="{Binding GrabCommand}"/>
                 <Separator/>
-                <MenuItem Header="Load from File"
-                          IsEnabled="False"/>
-                <MenuItem Header="Excel Export (long) ..."
-                          Command="{Binding ExcelExportCommand}"
-                          CommandParameter="{Binding}"/>
-                <MenuItem Header="CSV Export (quick) ..."
+                <MenuItem Header="CSV Export ..."
                           Command="{Binding CsvExportCommand}"
                           CommandParameter="{Binding}"/>
-                <Separator/>
                 <MenuItem Header="CSV Import ..."
                           Command="{Binding CsvImportCommand}"
                           CommandParameter="{Binding}"/>

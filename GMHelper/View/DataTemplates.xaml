@@ -80,7 +80,7 @@
                         <DataGridTextColumn Header="Contract"
                                         Binding="{Binding Contract, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Salary"
-                                        Binding="{Binding Salary, Mode=OneWay}"/>
+                                        Binding="{Binding Salary, Mode=OneWay, StringFormat=c}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid  Grid.Row="2" 
@@ -129,7 +129,7 @@
                         <DataGridTextColumn Header="Contract"
                                         Binding="{Binding Contract, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Salary"
-                                        Binding="{Binding Salary, Mode=OneWay}"/>
+                                        Binding="{Binding Salary, Mode=OneWay, StringFormat=c}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -192,7 +192,7 @@
                     <DataGridTextColumn Header="Contract"
                                     Binding="{Binding Contract, Mode=OneWay}"/>
                     <DataGridTextColumn Header="Salary"
-                                    Binding="{Binding Salary, Mode=OneWay}"/>
+                                    Binding="{Binding Salary, Mode=OneWay, StringFormat=c}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -244,7 +244,7 @@
                     <DataGridTextColumn Header="Contract"
                                     Binding="{Binding Contract, Mode=OneWay}"/>
                     <DataGridTextColumn Header="Salary"
-                                    Binding="{Binding Salary, Mode=OneWay}"/>
+                                    Binding="{Binding Salary, Mode=OneWay, StringFormat=c}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
