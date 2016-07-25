@@ -13,7 +13,7 @@ namespace GM.ViewModel
         public override bool CanExecute(object parameter)
         {
             var viewModel = parameter as MainWindowViewModel;
-            var players = viewModel?.AllSkatersOverviewViewModel?.Skaters;
+            var players = viewModel?.AllSkatersOverviewViewModel?.Players;
             return players != null && players.Any();
         }
 

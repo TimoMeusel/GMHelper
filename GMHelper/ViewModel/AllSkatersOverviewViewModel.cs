@@ -1,23 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using GM.Model;
 
 namespace GM.ViewModel
 {
-    public class AllSkatersOverviewViewModel: ViewModelBase
+    public class AllSkatersOverviewViewModel: OverviewViewModel<Skater>
     {
-        private IEnumerable<Skater> _skaters;
-
-        public IEnumerable<Skater> Skaters
+        public AllSkatersOverviewViewModel ()
         {
-            get
-            {
-                return _skaters;
-            }
-            set
-            {
-                _skaters = value;
-                OnPropertyChanged("Skaters");
-            }
+            SetFirstPlayerCommand = new SetFirstPlayerCommand<Skater>(this);
+            SetSecondPlayerCommand = new SetSecondPlayerCommand<Skater>(this);
+            ComparisonViewModel = new ComparisonViewModel<Skater>();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace GM.ViewModel
         public override bool CanExecute(object parameter)
         {
             var viewModel = parameter as MainWindowViewModel;
-            var players = viewModel?.AllSkatersOverviewViewModel?.Skaters;
+            var players = viewModel?.AllSkatersOverviewViewModel?.Players;
             return players != null && players.Any();
         }
 
@@ -25,7 +25,7 @@ namespace GM.ViewModel
         protected override void ExecuteInternal (object parameter)
         {
             var viewModel = parameter as MainWindowViewModel;
-            var players = viewModel?.AllSkatersOverviewViewModel?.Skaters;
+            var players = viewModel?.AllSkatersOverviewViewModel?.Players;
 
             ExcelExport export = new ExcelExport();
             

@@ -20,8 +20,8 @@ namespace GM.Persistence
 
             StringBuilder builder = new StringBuilder();
             
-            var allSkaters = mainWindowViewModel.AllSkatersOverviewViewModel.Skaters.ToList();
-            var allGoalies = mainWindowViewModel.AllGoaliesOverviewViewModel.Goalies.ToList();
+            var allSkaters = mainWindowViewModel.AllSkatersOverviewViewModel.Players.ToList();
+            var allGoalies = mainWindowViewModel.AllGoaliesOverviewViewModel.Players.ToList();
 
             mainWindowViewModel.TeamsOverviewViewModel.ShowPro = true;
             var allPros = mainWindowViewModel.TeamsOverviewViewModel.Teams.ToList();

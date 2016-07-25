@@ -32,8 +32,8 @@ namespace GM.ViewModel
             var teamRegistry = new TeamRegistry();
             var teams = teamRegistry.CreateTeams(players);
             viewModel.TeamsOverviewViewModel.Teams = teams;
-            viewModel.AllSkatersOverviewViewModel.Skaters = teamRegistry.AllSkaters;
-            viewModel.AllGoaliesOverviewViewModel.Goalies = teamRegistry.AllGoalies;
+            viewModel.AllSkatersOverviewViewModel.Players = teamRegistry.AllSkaters;
+            viewModel.AllGoaliesOverviewViewModel.Players = teamRegistry.AllGoalies;
         }
     }
 }

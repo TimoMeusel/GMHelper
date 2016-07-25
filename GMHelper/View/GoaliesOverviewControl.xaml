@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="GM.View.GoaliesOverviewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GM.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+  <Grid>
+    <DataGrid AutoGenerateColumns="False"
+              ItemsSource="{Binding Path=Skaters}"
+              MinHeight="100">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Name"
+                        Binding="{Binding Name, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Team"
+                                Binding="{Binding Team.Name, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Condition"
+                        Binding="{Binding Condition, Mode=OneWay}"/>
+        <DataGridCheckBoxColumn Header="Injured"
+                        Binding="{Binding IsInjured, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Skating"
+                        Binding="{Binding Skating, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Strength"
+                        Binding="{Binding Strength, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Endurance"
+                        Binding="{Binding Endurance, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Durability"
+                        Binding="{Binding Durability, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Size"
+                        Binding="{Binding Size, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Agility"
+                        Binding="{Binding Agility, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Rebound"
+                        Binding="{Binding Rebound   , Mode=OneWay}"/>
+        <DataGridTextColumn Header="StyleControl"
+                        Binding="{Binding StyleControl, Mode=OneWay}"/>
+        <DataGridTextColumn Header="HandSpeed"
+                        Binding="{Binding HandSpeed, Mode=OneWay}"/>
+        <DataGridTextColumn Header="ReactionTime"
+                        Binding="{Binding ReactionTime, Mode=OneWay}"/>
+        <DataGridTextColumn Header="PuckHandling"
+                        Binding="{Binding PuckHandling, Mode=OneWay}"/>
+        <DataGridTextColumn Header="PenaltyShot"
+                        Binding="{Binding PenaltyShot, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Experience"
+                        Binding="{Binding Experience, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Leadership"
+                        Binding="{Binding Leadership, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Morale"
+                        Binding="{Binding Morale, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Age"
+                        Binding="{Binding Age, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Contract"
+                        Binding="{Binding Contract, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Salary"
+                        Binding="{Binding Salary, Mode=OneWay, StringFormat=c}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

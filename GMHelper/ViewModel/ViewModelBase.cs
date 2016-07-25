@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace GM.ViewModel
 {
@@ -6,7 +7,7 @@ namespace GM.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged(string property)
+        public void OnPropertyChanged([CallerMemberName] string property = null)
         {
             var handler = PropertyChanged;
             if(handler != null)
