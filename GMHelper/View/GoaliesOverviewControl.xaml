@@ -7,9 +7,34 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
   <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
     <DataGrid AutoGenerateColumns="False"
-              ItemsSource="{Binding Path=Skaters}"
-              MinHeight="100">
+              x:Name="OverviewGrid"
+              Grid.Row="0"
+              ItemsSource="{Binding Path=Players}"
+              SelectionMode="Single"
+              SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}">
+      <DataGrid.RowStyle>
+        <Style TargetType="DataGridRow">
+          <Setter Property="Tag"
+                  Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext}"/>
+          <Setter Property="ContextMenu">
+            <Setter.Value>
+              <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                <MenuItem Header="Set First Player for comparison"
+                          Command="{Binding SetFirstPlayerCommand}"
+                          CommandParameter="{Binding SelectedPlayer}"/>
+                <MenuItem Header="Set Second Player for comparison"
+                          Command="{Binding SetSecondPlayerCommand}"
+                          CommandParameter="{Binding SelectedPlayer}"/>
+              </ContextMenu>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </DataGrid.RowStyle>
       <DataGrid.Columns>
         <DataGridTextColumn Header="Name"
                         Binding="{Binding Name, Mode=OneWay}"/>
@@ -57,5 +82,11 @@
                         Binding="{Binding Salary, Mode=OneWay, StringFormat=c}"/>
       </DataGrid.Columns>
     </DataGrid>
+    <Grid Grid.Row="1">
+      <local:GoalieComparisonGrid DataContext="{Binding ComparisonViewModel}"
+                            FirstPlayer="{Binding FirstPlayer}"
+                            SecondPlayer="{Binding SecondPlayer}"/>
+
+    </Grid>
   </Grid>
 </UserControl>

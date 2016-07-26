@@ -93,7 +93,7 @@
       </DataGrid.Columns>
     </DataGrid>
     <Grid Grid.Row="1">
-      <local:ComparisonGrid DataContext="{Binding ComparisonViewModel}"
+      <local:SkaterComparisonGrid DataContext="{Binding ComparisonViewModel}"
                             FirstPlayer="{Binding FirstPlayer}"
                             SecondPlayer="{Binding SecondPlayer}"/>
       

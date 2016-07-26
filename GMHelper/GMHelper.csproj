@@ -79,8 +79,11 @@
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\SetSecondPlayerCommand.cs" />
     <Compile Include="ViewModel\SetFirstPlayerCommand.cs" />
-    <Compile Include="View\ComparisonGrid.xaml.cs">
-      <DependentUpon>ComparisonGrid.xaml</DependentUpon>
+    <Compile Include="View\GoalieComparisonGrid.xaml.cs">
+      <DependentUpon>GoalieComparisonGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SkaterComparisonGrid.xaml.cs">
+      <DependentUpon>SkaterComparisonGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\GoaliesOverviewControl.xaml.cs">
       <DependentUpon>GoaliesOverviewControl.xaml</DependentUpon>
@@ -91,7 +94,11 @@
     <Compile Include="View\TeamOverViewControl.xaml.cs">
       <DependentUpon>TeamOverViewControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="View\ComparisonGrid.xaml">
+    <Page Include="View\GoalieComparisonGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SkaterComparisonGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using GM.ViewModel;
 
 namespace GM.View
@@ -11,26 +13,26 @@ namespace GM.View
     /// <summary>
     /// Interaction logic for ComparisonGrid.xaml
     /// </summary>
-    public partial class ComparisonGrid
+    public partial class SkaterComparisonGrid
     {
-        private readonly PlayerViewModel[] _shadowCopy;
+        private readonly SkaterViewModel[] _shadowCopy;
 
-        public ComparisonGrid()
+        public SkaterComparisonGrid()
         {
             InitializeComponent();
-            _shadowCopy = new PlayerViewModel[2];
-            Players = new ObservableCollection<PlayerViewModel>();
+            _shadowCopy = new SkaterViewModel[2];
+            Players = new ObservableCollection<SkaterViewModel>();
         }
 
         #region Players
 
         public static readonly DependencyProperty PlayersProperty =
-            DependencyProperty.Register("Players", typeof(ObservableCollection<PlayerViewModel>), typeof(ComparisonGrid), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Players", typeof(ObservableCollection<SkaterViewModel>), typeof(SkaterComparisonGrid), new UIPropertyMetadata(null));
 
-        public ObservableCollection<PlayerViewModel> Players
+        public ObservableCollection<SkaterViewModel> Players
         {
             [ExcludeFromCodeCoverage]
-            get { return (ObservableCollection<PlayerViewModel> )GetValue(PlayersProperty); }
+            get { return (ObservableCollection<SkaterViewModel> )GetValue(PlayersProperty); }
 
             [ExcludeFromCodeCoverage]
             set { SetValue(PlayersProperty, value); }
@@ -41,7 +43,7 @@ namespace GM.View
         #region FirstPlayer
 
         public static readonly DependencyProperty FirstPlayerProperty =
-            DependencyProperty.Register("FirstPlayer", typeof(PlayerViewModel), typeof(ComparisonGrid), new UIPropertyMetadata(null, FirstPlayerChanged));
+            DependencyProperty.Register("FirstPlayer", typeof(SkaterViewModel), typeof(SkaterComparisonGrid), new UIPropertyMetadata(null, FirstPlayerChanged));
 
         private static void FirstPlayerChanged (DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -50,9 +52,9 @@ namespace GM.View
                 return;
             }
 
-            var comparisonGrid = (ComparisonGrid)dependencyObject;
-            var newPlayer = (PlayerViewModel)dependencyPropertyChangedEventArgs.NewValue;
-
+            var comparisonGrid = (SkaterComparisonGrid)dependencyObject;
+            var newPlayer = ( SkaterViewModel ) dependencyPropertyChangedEventArgs.NewValue;
+            
             if (comparisonGrid._shadowCopy[0] != null)
             {
                 comparisonGrid.Players.RemoveAt(0);
@@ -62,10 +64,10 @@ namespace GM.View
             comparisonGrid._shadowCopy[0] = newPlayer;
         }
 
-        public PlayerViewModel FirstPlayer
+        public SkaterViewModel FirstPlayer
         {
             [ExcludeFromCodeCoverage]
-            get { return ( PlayerViewModel ) GetValue(FirstPlayerProperty); }
+            get { return ( SkaterViewModel ) GetValue(FirstPlayerProperty); }
 
             [ExcludeFromCodeCoverage]
             set { SetValue(FirstPlayerProperty, value); }
@@ -77,7 +79,7 @@ namespace GM.View
         #region SecondPlayer
 
         public static readonly DependencyProperty SecondPlayerProperty =
-            DependencyProperty.Register("SecondPlayer", typeof(PlayerViewModel), typeof(ComparisonGrid), new UIPropertyMetadata(null, SecondPlayerChanged));
+            DependencyProperty.Register("SecondPlayer", typeof(SkaterViewModel), typeof(SkaterComparisonGrid), new UIPropertyMetadata(null, SecondPlayerChanged));
 
         private static void SecondPlayerChanged (DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -86,8 +88,8 @@ namespace GM.View
                 return;
             }
 
-            var comparisonGrid = ( ComparisonGrid ) dependencyObject;
-            var newPlayer = ( PlayerViewModel ) dependencyPropertyChangedEventArgs.NewValue;
+            var comparisonGrid = ( SkaterComparisonGrid ) dependencyObject;
+            var newPlayer = ( SkaterViewModel ) dependencyPropertyChangedEventArgs.NewValue;
 
             if ( comparisonGrid._shadowCopy[1] != null )
             {
@@ -98,11 +100,11 @@ namespace GM.View
             comparisonGrid._shadowCopy[1] = newPlayer;
         }
 
-        public PlayerViewModel SecondPlayer
+        public SkaterViewModel SecondPlayer
         {
             [ExcludeFromCodeCoverage]
             get
-            { return ( PlayerViewModel ) GetValue(SecondPlayerProperty); }
+            { return ( SkaterViewModel ) GetValue(SecondPlayerProperty); }
 
             [ExcludeFromCodeCoverage]
             set
@@ -114,13 +116,13 @@ namespace GM.View
         #region Comparison
 
         public static readonly DependencyProperty ComparisonProperty =
-            DependencyProperty.Register("Comparison", typeof(PlayerViewModel), typeof(ComparisonGrid), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Comparison", typeof(SkaterViewModel), typeof(SkaterComparisonGrid), new UIPropertyMetadata(null));
         
-        public PlayerViewModel Comparison
+        public SkaterViewModel Comparison
         {
             [ExcludeFromCodeCoverage]
             get
-            { return ( PlayerViewModel ) GetValue(ComparisonProperty); }
+            { return ( SkaterViewModel ) GetValue(ComparisonProperty); }
 
             [ExcludeFromCodeCoverage]
             set
@@ -132,7 +134,7 @@ namespace GM.View
         #region Headers
 
         public static readonly DependencyProperty HeadersProperty =
-            DependencyProperty.Register("Headers", typeof(IEnumerable<string>), typeof(ComparisonGrid), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Headers", typeof(IEnumerable<string>), typeof(SkaterComparisonGrid), new UIPropertyMetadata(null));
 
         public IEnumerable<string> Headers
         {
