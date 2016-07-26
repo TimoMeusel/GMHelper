@@ -7,7 +7,7 @@ using GM.Model;
 
 namespace GM.ViewModel
 {
-    public class SetFirstPlayerCommand<T>:BaseCommand where T:Player
+    public class SetFirstPlayerCommand<T>:BaseCommand where T:PlayerViewModel
     {
         private readonly OverviewViewModel<T> _overviewViewModel;
 

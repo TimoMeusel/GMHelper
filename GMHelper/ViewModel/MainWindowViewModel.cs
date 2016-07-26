@@ -12,7 +12,6 @@ namespace GM.ViewModel
             AllSkatersOverviewViewModel = new AllSkatersOverviewViewModel();
             AllGoaliesOverviewViewModel = new AllGoaliesOverviewViewModel();
             GrabCommand = new GrabCommand(this);
-            ExcelExportCommand = new ExcelExportCommand();
             CsvExportCommand = new CsvExportCommand();
             CsvImportCommand = new CsvImportCommand();
 
@@ -25,7 +24,6 @@ namespace GM.ViewModel
         }
 
         public ICommand GrabCommand { get; private set; }
-        public ICommand ExcelExportCommand { get; private set; }
         public ICommand CsvExportCommand { get; private set; }
         public ICommand CsvImportCommand { get; private set; }
         public ICommand ShowProTeamsCommand { get; private set; }
@@ -47,8 +45,7 @@ namespace GM.ViewModel
                 OnPropertyChanged("Current");
             }
         }
-
-
+        
         private void ShowFarmTeams(object o)
         {
             TeamsOverviewViewModel.ShowPro = false;

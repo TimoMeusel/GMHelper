@@ -4,8 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using GM.Model;
+using GM.ViewModel;
 
 namespace GM.View
 {
@@ -14,21 +13,24 @@ namespace GM.View
     /// </summary>
     public partial class ComparisonGrid
     {
+        private readonly PlayerViewModel[] _shadowCopy;
+
         public ComparisonGrid()
         {
             InitializeComponent();
-            Players = new ObservableCollection<Player>();
+            _shadowCopy = new PlayerViewModel[2];
+            Players = new ObservableCollection<PlayerViewModel>();
         }
 
         #region Players
 
         public static readonly DependencyProperty PlayersProperty =
-            DependencyProperty.Register("Players", typeof(ObservableCollection<Player>), typeof(ComparisonGrid), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Players", typeof(ObservableCollection<PlayerViewModel>), typeof(ComparisonGrid), new UIPropertyMetadata(null));
 
-        public ObservableCollection<Player> Players
+        public ObservableCollection<PlayerViewModel> Players
         {
             [ExcludeFromCodeCoverage]
-            get { return (ObservableCollection<Player>)GetValue(PlayersProperty); }
+            get { return (ObservableCollection<PlayerViewModel> )GetValue(PlayersProperty); }
 
             [ExcludeFromCodeCoverage]
             set { SetValue(PlayersProperty, value); }
@@ -39,12 +41,31 @@ namespace GM.View
         #region FirstPlayer
 
         public static readonly DependencyProperty FirstPlayerProperty =
-            DependencyProperty.Register("FirstPlayer", typeof(Player), typeof(ComparisonGrid), new UIPropertyMetadata(null, PropertyChangedCallback));
-        
-        public Player FirstPlayer
+            DependencyProperty.Register("FirstPlayer", typeof(PlayerViewModel), typeof(ComparisonGrid), new UIPropertyMetadata(null, FirstPlayerChanged));
+
+        private static void FirstPlayerChanged (DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            if ( dependencyPropertyChangedEventArgs.NewValue == null )
+            {
+                return;
+            }
+
+            var comparisonGrid = (ComparisonGrid)dependencyObject;
+            var newPlayer = (PlayerViewModel)dependencyPropertyChangedEventArgs.NewValue;
+
+            if (comparisonGrid._shadowCopy[0] != null)
+            {
+                comparisonGrid.Players.RemoveAt(0);
+            }
+
+            comparisonGrid.Players.Insert(0, newPlayer);
+            comparisonGrid._shadowCopy[0] = newPlayer;
+        }
+
+        public PlayerViewModel FirstPlayer
         {
             [ExcludeFromCodeCoverage]
-            get { return (Player)GetValue(FirstPlayerProperty); }
+            get { return ( PlayerViewModel ) GetValue(FirstPlayerProperty); }
 
             [ExcludeFromCodeCoverage]
             set { SetValue(FirstPlayerProperty, value); }
@@ -56,13 +77,32 @@ namespace GM.View
         #region SecondPlayer
 
         public static readonly DependencyProperty SecondPlayerProperty =
-            DependencyProperty.Register("SecondPlayer", typeof(Player), typeof(ComparisonGrid), new UIPropertyMetadata(null, PropertyChangedCallback));
-        
-        public Player SecondPlayer
+            DependencyProperty.Register("SecondPlayer", typeof(PlayerViewModel), typeof(ComparisonGrid), new UIPropertyMetadata(null, SecondPlayerChanged));
+
+        private static void SecondPlayerChanged (DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            if ( dependencyPropertyChangedEventArgs.NewValue == null )
+            {
+                return;
+            }
+
+            var comparisonGrid = ( ComparisonGrid ) dependencyObject;
+            var newPlayer = ( PlayerViewModel ) dependencyPropertyChangedEventArgs.NewValue;
+
+            if ( comparisonGrid._shadowCopy[1] != null )
+            {
+                comparisonGrid.Players.RemoveAt(1);
+            }
+
+            comparisonGrid.Players.Insert(1, newPlayer);
+            comparisonGrid._shadowCopy[1] = newPlayer;
+        }
+
+        public PlayerViewModel SecondPlayer
         {
             [ExcludeFromCodeCoverage]
             get
-            { return ( Player ) GetValue(SecondPlayerProperty); }
+            { return ( PlayerViewModel ) GetValue(SecondPlayerProperty); }
 
             [ExcludeFromCodeCoverage]
             set
@@ -70,41 +110,17 @@ namespace GM.View
         }
 
         #endregion
-
-        private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            var comparisonGrid = ( ComparisonGrid ) dependencyObject;
-            comparisonGrid.Players.Clear();
-
-            if (comparisonGrid.FirstPlayer != null)
-            {
-                comparisonGrid.Players.Add(comparisonGrid.FirstPlayer);
-            }
-            else
-            {
-                comparisonGrid.Players.Add(null);
-            }
-
-            if ( comparisonGrid.FirstPlayer != null )
-            {
-                comparisonGrid.Players.Add(comparisonGrid.SecondPlayer);
-            }
-            else
-            {
-                comparisonGrid.Players.Add(null);
-            }
-        }
-
+        
         #region Comparison
 
         public static readonly DependencyProperty ComparisonProperty =
-            DependencyProperty.Register("Comparison", typeof(Player), typeof(ComparisonGrid), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Comparison", typeof(PlayerViewModel), typeof(ComparisonGrid), new UIPropertyMetadata(null));
         
-        public Player Comparison
+        public PlayerViewModel Comparison
         {
             [ExcludeFromCodeCoverage]
             get
-            { return ( Player ) GetValue(ComparisonProperty); }
+            { return ( PlayerViewModel ) GetValue(ComparisonProperty); }
 
             [ExcludeFromCodeCoverage]
             set

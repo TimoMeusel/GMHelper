@@ -45,7 +45,7 @@ namespace GM.Persistence
             File.WriteAllText(path, builder.ToString());
         }
 
-        private static string AppendPlayers (List<Skater> allSkaters)
+        private static string AppendPlayers (List<SkaterViewModel> allSkaters)
         {
             StringBuilder builder = new StringBuilder();
             List<string> headers = allSkaters.First().Values.Keys.ToList().ToList();
@@ -65,7 +65,7 @@ namespace GM.Persistence
             return builder.ToString();
         }
 
-        private static string AppendGoalies (List<Goalie> allGoalies)
+        private static string AppendGoalies (List<GoalieViewModel> allGoalies)
         {
             StringBuilder builder = new StringBuilder();
             List<string> headers = allGoalies.First().Values.Keys.ToList().ToList();
@@ -106,7 +106,7 @@ namespace GM.Persistence
             return teamBuilder.ToString();
         }
 
-        private static string GenerateTeamDisplay(Player player)
+        private static string GenerateTeamDisplay(PlayerViewModel player)
         {
             var teamDisplay = string.Empty;
             var farmTeam = player.Team as FarmTeam;

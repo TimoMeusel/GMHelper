@@ -7,8 +7,8 @@ namespace GM.ViewModel
     public class TeamRegistry
     {
         public List<TeamViewModel> Teams { get; private set; }
-        public List<Skater> AllSkaters { get; private set; }
-        public List<Goalie> AllGoalies { get; private set; }
+        public List<SkaterViewModel> AllSkaters { get; private set; }
+        public List<GoalieViewModel> AllGoalies { get; private set; }
 
         public List<TeamViewModel> CreateTeams(IEnumerable<Player> players)
         {
@@ -23,16 +23,16 @@ namespace GM.ViewModel
 
             foreach ( var team in teams )
             {
-                List<Skater> skaters =
-                    teamMap.Where(t => t.Value.Equals(team)).Where(t => t.Key is Skater).Select(t => t.Key).Cast<Skater>().ToList();
-                List<Goalie> goalies =
-                    teamMap.Where(t => t.Value.Equals(team)).Where(t => t.Key is Goalie).Select(t => t.Key).Cast<Goalie>().ToList();
+                List<SkaterViewModel> skaters =
+                    teamMap.Where(t => t.Value.Equals(team)).Where(t => t.Key is Skater).Select(t => t.Key).Cast<Skater>().Select(s => new SkaterViewModel(s)).ToList();
+                List<GoalieViewModel> goalies =
+                    teamMap.Where(t => t.Value.Equals(team)).Where(t => t.Key is Goalie).Select(t => t.Key).Cast<Goalie>().Select(g => new GoalieViewModel(g)).ToList();
 
                 teamsViewModels.Add(new TeamViewModel(team, skaters, goalies));
             }
 
-            AllSkaters = teamMap.Keys.Where(p => p is Skater).Cast<Skater>().ToList();
-            AllGoalies = teamMap.Keys.Where(p => p is Goalie).Cast<Goalie>().ToList();
+            AllSkaters = teamMap.Keys.Where(p => p is Skater).Cast<Skater>().Select(s => new SkaterViewModel(s)).ToList();
+            AllGoalies = teamMap.Keys.Where(p => p is Goalie).Cast<Goalie>().Select(g => new GoalieViewModel(g)).ToList();
 
             Teams = teamsViewModels;
             return teamsViewModels;

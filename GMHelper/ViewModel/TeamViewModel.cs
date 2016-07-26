@@ -14,11 +14,11 @@ namespace GM.ViewModel
         /// <summary>
         ///     Instantiates a team with
         /// </summary>
-        public TeamViewModel(Team team, IEnumerable<Skater> skaters, IEnumerable<Goalie> goalies)
+        public TeamViewModel(Team team, IEnumerable<SkaterViewModel> skaters, IEnumerable<GoalieViewModel> goalies)
         {
             _team = team;
-            Skaters = new ObservableCollection<Skater>(skaters);
-            Goalies = new ObservableCollection<Goalie>(goalies);
+            Skaters = new ObservableCollection<SkaterViewModel>(skaters);
+            Goalies = new ObservableCollection<GoalieViewModel>(goalies);
             IsPro = !(team is FarmTeam);
             
             OnPropertyChanged("HeaderText");
@@ -53,11 +53,11 @@ namespace GM.ViewModel
         /// <summary>
         ///     All skaters
         /// </summary>
-        public ObservableCollection<Skater> Skaters{ get; }
+        public ObservableCollection<SkaterViewModel> Skaters{ get; }
 
         /// <summary>
         ///     All goalies
         /// </summary>
-        public ObservableCollection<Goalie> Goalies{ get; }
+        public ObservableCollection<GoalieViewModel> Goalies{ get; }
     }
 }

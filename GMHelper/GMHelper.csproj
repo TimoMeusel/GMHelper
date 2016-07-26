@@ -67,14 +67,15 @@
     </ApplicationDefinition>
     <Compile Include="Model\FarmTeam.cs" />
     <Compile Include="Persistence\CsvImport.cs" />
-    <Compile Include="Persistence\ExcelExport.cs" />
     <Compile Include="Persistence\CsvExport.cs" />
     <Compile Include="ViewModel\AllGoaliesOverviewViewModel.cs" />
     <Compile Include="ViewModel\ComparisonViewModel.cs" />
     <Compile Include="ViewModel\CsvExportCommand.cs" />
     <Compile Include="ViewModel\CsvImportCommand.cs" />
-    <Compile Include="ViewModel\ExcelExportCommand.cs" />
+    <Compile Include="ViewModel\GoalieViewModel.cs" />
     <Compile Include="ViewModel\OverviewViewModel.cs" />
+    <Compile Include="ViewModel\PlayerViewModel.cs" />
+    <Compile Include="ViewModel\SkaterViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\SetSecondPlayerCommand.cs" />
     <Compile Include="ViewModel\SetFirstPlayerCommand.cs" />

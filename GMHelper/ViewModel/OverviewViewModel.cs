@@ -4,7 +4,7 @@ using GM.Model;
 
 namespace GM.ViewModel
 {
-    public abstract class OverviewViewModel<T>: ViewModelBase where T:Player
+    public abstract class OverviewViewModel<T>: ViewModelBase where T:PlayerViewModel
     {
         private IEnumerable<T> _players;
         private ICommand _setFirstPlayerCommand;

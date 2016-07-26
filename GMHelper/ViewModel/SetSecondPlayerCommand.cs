@@ -3,7 +3,7 @@ using GM.Model;
 
 namespace GM.ViewModel
 {
-    public class SetSecondPlayerCommand<T>:BaseCommand where T:Player
+    public class SetSecondPlayerCommand<T>:BaseCommand where T:PlayerViewModel
     {
         private readonly OverviewViewModel<T> _overviewViewModel;
 

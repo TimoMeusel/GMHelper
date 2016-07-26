@@ -2,7 +2,7 @@
 
 namespace GM.ViewModel
 {
-    public class AllGoaliesOverviewViewModel: OverviewViewModel<Goalie>
+    public class AllGoaliesOverviewViewModel: OverviewViewModel<GoalieViewModel>
     {
     }
 }

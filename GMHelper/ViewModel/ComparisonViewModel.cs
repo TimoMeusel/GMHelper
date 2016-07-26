@@ -3,7 +3,7 @@ using GM.Model;
 
 namespace GM.ViewModel
 {
-    public class ComparisonViewModel<T>: ViewModelBase where T:Player
+    public class ComparisonViewModel<T>: ViewModelBase where T:PlayerViewModel
     {
         private T _firstPlayer;
         private T _secondPlayer;
