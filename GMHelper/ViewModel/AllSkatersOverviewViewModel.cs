@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Input;
-using GM.Model;
-
-namespace GM.ViewModel
+﻿namespace GM.ViewModel
 {
     public class AllSkatersOverviewViewModel: OverviewViewModel<SkaterViewModel>
     {

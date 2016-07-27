@@ -91,7 +91,7 @@ namespace GM.Model
             Contract = contract;
 
             string salary = values["Salary"];
-            string salaryText = salary.Split(' ').First();
+            string salaryText = salary.Split(' ').First().Replace(".", "");
             int salaryValue;
             int.TryParse(salaryText, out salaryValue);
             Salary = salaryValue;

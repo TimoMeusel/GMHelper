@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+using System.Windows.Media;
 using GM.ViewModel;
 
 namespace GM.View
@@ -22,6 +21,8 @@ namespace GM.View
             InitializeComponent();
             _shadowCopy = new SkaterViewModel[2];
             Players = new ObservableCollection<SkaterViewModel>();
+
+            LayoutUpdated += (sender, args) => Compare();
         }
 
         #region Players
@@ -62,6 +63,8 @@ namespace GM.View
 
             comparisonGrid.Players.Insert(0, newPlayer);
             comparisonGrid._shadowCopy[0] = newPlayer;
+
+            comparisonGrid.Compare();
         }
 
         public SkaterViewModel FirstPlayer
@@ -96,8 +99,10 @@ namespace GM.View
                 comparisonGrid.Players.RemoveAt(1);
             }
 
-            comparisonGrid.Players.Insert(1, newPlayer);
+            comparisonGrid.Players.Add(newPlayer);
             comparisonGrid._shadowCopy[1] = newPlayer;
+            
+            comparisonGrid.Compare();
         }
 
         public SkaterViewModel SecondPlayer
@@ -113,24 +118,6 @@ namespace GM.View
 
         #endregion
         
-        #region Comparison
-
-        public static readonly DependencyProperty ComparisonProperty =
-            DependencyProperty.Register("Comparison", typeof(SkaterViewModel), typeof(SkaterComparisonGrid), new UIPropertyMetadata(null));
-        
-        public SkaterViewModel Comparison
-        {
-            [ExcludeFromCodeCoverage]
-            get
-            { return ( SkaterViewModel ) GetValue(ComparisonProperty); }
-
-            [ExcludeFromCodeCoverage]
-            set
-            { SetValue(ComparisonProperty, value); }
-        }
-
-        #endregion
-
         #region Headers
 
         public static readonly DependencyProperty HeadersProperty =
@@ -147,35 +134,103 @@ namespace GM.View
 
         #endregion
 
-        private void CalculatedDelta ()
-        {
-            var p1 = FirstPlayer;
-            var p2 = SecondPlayer;
-            var headers = Headers.ToArray();
+        #region Private Helper
 
-            if (p1.GetType() != p2.GetType())
+        private void Compare ()
+        {
+            if (Items.Count != 2)
             {
                 return;
             }
 
-            double[] delta = new double[p1.Values.Count];
+            var firstRow = (DataGridRow)ItemContainerGenerator.ContainerFromItem(Items[0]);
+            var secondRow = (DataGridRow)ItemContainerGenerator.ContainerFromItem(Items[1]);
 
-            for (var i = 0; i < p1.Values.Count; i++)
+            if (firstRow == null || secondRow == null)
             {
-                double value1;
-                if (!double.TryParse(p1.Values[headers[i]], out value1))
+                return;
+            }
+
+            var firstCells = GetVisualDescendants<DataGridCell>(firstRow).ToList();
+            var secondCells = GetVisualDescendants<DataGridCell>(secondRow).ToList();
+
+            if (firstCells.Count != secondCells.Count)
+            {
+                //throw new InvalidOperationException("Inconsistent count of cells for comparison");
+                return;
+            }
+
+            // Compare all but Age, Contract and Salary
+            for (int i = 0; i < firstCells.Count - 3; i++)
+            {
+                int firstValue = GetValue(firstCells, i);
+                if (firstValue == -1)
                 {
-                    value1 = double.PositiveInfinity;
+                    continue;
                 }
 
-                double value2;
-                if ( !double.TryParse(p2.Values[headers[i]], out value2) )
+                int secondValue = GetValue(secondCells, i);
+                if (secondValue == -1)
                 {
-                    value2 = double.PositiveInfinity;
+                    continue;
                 }
 
-                delta[i] = value1 - value2;
+
+                if (firstValue > secondValue)
+                {
+                    firstCells[i].Background = Brushes.Lime;
+                    secondCells[i].Background = Brushes.Red;
+                }
+                else if (firstValue < secondValue)
+                {
+                    firstCells[i].Background = Brushes.Red;
+                    secondCells[i].Background = Brushes.Lime;
+                }
             }
         }
+
+        private static int GetValue (List<DataGridCell> cells, int i)
+        {
+            var text = GetVisualDescendants<TextBlock>(cells[i]).FirstOrDefault();
+            if (text == null)
+            {
+                return -1;
+            }
+
+            int value;
+            if (!int.TryParse(text.Text, out value))
+            {
+                return -1;
+            }
+            return value;
+        }
+
+        private static IEnumerable<T> GetVisualDescendants<T> (DependencyObject dependencyObject) where T : DependencyObject
+        {
+            if (dependencyObject == null)
+            {
+                yield break;
+            }
+
+            int childCount = VisualTreeHelper.GetChildrenCount(dependencyObject);
+
+            for (int n = 0; n < childCount; n++)
+            {
+                var child = VisualTreeHelper.GetChild(dependencyObject, n);
+
+                if (child is T)
+                {
+                    yield return (T)child;
+                }
+
+                foreach (var match in GetVisualDescendants<T>(child))
+                {
+                    yield return match;
+                }
+            }
+        }
+
+        #endregion
+
     }
 }
