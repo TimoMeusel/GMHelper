@@ -174,8 +174,7 @@ namespace GM.View
                 {
                     continue;
                 }
-
-
+                
                 if (firstValue > secondValue)
                 {
                     firstCells[i].Background = Brushes.Lime;
@@ -185,6 +184,11 @@ namespace GM.View
                 {
                     firstCells[i].Background = Brushes.Red;
                     secondCells[i].Background = Brushes.Lime;
+                }
+                else
+                {
+                    firstCells[i].Background = Brushes.White;
+                    secondCells[i].Background = Brushes.White;
                 }
             }
         }
