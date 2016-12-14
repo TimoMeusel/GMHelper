@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GM.Model;
 
 namespace GM.ViewModel
@@ -98,5 +99,25 @@ namespace GM.ViewModel
         ///     The yearly salary
         /// </summary>
         public int Salary => _player.Salary;
+
+        /// <summary>
+        ///     The country of birth
+        /// </summary>
+        public string Country => _player.Country;
+
+        /// <summary>
+        ///     The height
+        /// </summary>
+        public string Height => _player.Height;
+
+        /// <summary>
+        ///     The weight
+        /// </summary>
+        public string Weight => _player.Weight;
+
+        /// <summary>
+        ///     The date of birth
+        /// </summary>
+        public DateTime Birthday => _player.Birthday;
     }
 }

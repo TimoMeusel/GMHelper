@@ -90,6 +90,14 @@
                         Binding="{Binding Contract, Mode=OneWay}"/>
         <DataGridTextColumn Header="Salary"
                         Binding="{Binding Salary, Mode=OneWay, StringFormat=c}"/>
+        <DataGridTextColumn Header="Country"
+                        Binding="{Binding Country, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Height"
+                        Binding="{Binding Height, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Weight"
+                        Binding="{Binding Weight, Mode=OneWay}"/>
+        <DataGridTextColumn Header="Birthday"
+                        Binding="{Binding Birthday, Mode=OneWay, StringFormat=dd.MM.yyy}"/>
       </DataGrid.Columns>
     </DataGrid>
     <Grid Grid.Row="1">

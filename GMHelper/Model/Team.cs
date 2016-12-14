@@ -1,9 +1,12 @@
-﻿namespace GM.Model
+﻿using System.Diagnostics;
+
+namespace GM.Model
 {
 
     /// <summary>
     /// Represents a general team
     /// </summary>
+    [DebuggerDisplay("{Name}")]
     public class Team
     {
         private static Team _noTeam;

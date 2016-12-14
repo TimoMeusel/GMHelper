@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace GM.Model
@@ -26,6 +27,19 @@ namespace GM.Model
         ///     The player's team
         /// </summary>
         public Team Team { get; protected set; }
+
+        public Team Franchise
+        {
+            get
+            {
+                var farm = Team as FarmTeam;
+                if (farm != null)
+                {
+                    return farm.ProTeam;
+                }
+                return Team;
+            }
+        }
 
         /// <summary>
         ///     CON
@@ -101,5 +115,33 @@ namespace GM.Model
         ///     The yearly salary
         /// </summary>
         public int Salary { get; protected set; }
+
+        /// <summary>
+        ///     The country of birth
+        /// </summary>
+        public string Country { get; protected set; }
+
+        /// <summary>
+        ///     The birthday
+        /// </summary>
+        public DateTime Birthday { get; protected set; }
+
+        /// <summary>
+        ///     The Weight
+        /// </summary>
+        public string Weight { get; protected set; }
+
+        /// <summary>
+        ///     The Height
+        /// </summary>
+        public string Height { get; protected set; }
+
+        public void SetAdditionals (AdditionalPlayerInfo additionalPlayerInfo)
+        {
+            Country = additionalPlayerInfo.Country;
+            Birthday = additionalPlayerInfo.Birthday;
+            Weight = additionalPlayerInfo.Weight;
+            Height = additionalPlayerInfo.Height;
+        }
     }
 }

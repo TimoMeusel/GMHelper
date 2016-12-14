@@ -66,6 +66,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\FarmTeam.cs" />
+    <Compile Include="Model\AdditionalPlayerInfo.cs" />
     <Compile Include="Persistence\CsvImport.cs" />
     <Compile Include="Persistence\CsvExport.cs" />
     <Compile Include="ViewModel\AllGoaliesOverviewViewModel.cs" />
