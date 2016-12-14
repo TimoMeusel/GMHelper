@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using GM.Model;
 
 namespace GM.ViewModel
 {
@@ -10,7 +9,7 @@ namespace GM.ViewModel
         private ICommand _setFirstPlayerCommand;
         private ICommand _setSecondPlayerCommand;
         private T _selectedPlayer;
-
+        
         public IEnumerable<T> Players
         {
             get { return _players; }
@@ -50,6 +49,20 @@ namespace GM.ViewModel
             {
                 _selectedPlayer = value; 
                 OnPropertyChanged();
+                OnPropertyChanged("Url");
+            }
+        }
+
+        public string Url
+        {
+            get
+            {
+                if (SelectedPlayer?.EliteProspectsId != null)
+                {
+                    return $"http://www.eliteprospects.com/iframe_player_stats.php?player={SelectedPlayer.EliteProspectsId}";
+                }
+
+                return $"http://www.eliteprospects.com/iframe_player_stats.php";
             }
         }
     }

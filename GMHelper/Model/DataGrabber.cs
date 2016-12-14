@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace GM.Model
 {
@@ -27,11 +31,7 @@ namespace GM.Model
         {
             var additionals = GrabPlayersAdditionalInfo();
             var players = GrabPlayerBasicInfo().ToList();
-
-            //var query = from player in players
-            //            join info in additionals on new {player.Name, player.Team} equals new {  info.Name, info.Franchise }
-            //            select new { player, info };
-
+            
             var query = from player in players
                               from info in additionals
                                   .Where(info => info.Name == player.Name && info.Franchise.Equals(player.Franchise))
@@ -42,11 +42,63 @@ namespace GM.Model
             var result = new List<Player>();
             foreach (var match in query)
             {
-                match.player.SetAdditionals(match.info);
-                result.Add(match.player);
-            }    
+                var player = match.player;
 
+                player.SetAdditionals(match.info);
+                player.SetEliteProspectsId(GetEliteProspectsId(player.Name, player.Birthday));
+
+                result.Add(player);
+            }
+            
             return result;
+        }
+
+        private static string GetEliteProspectsId (string name, DateTime birthday)
+        {
+            var address = string.Format("http://api.eliteprospects.com/beta/search?type=player&q={0}&filter=dateOfBirth={1}",
+                                        name,
+                                        birthday.ToString("yyyy-MM-dd"));
+
+            HttpWebRequest request = ( HttpWebRequest ) WebRequest.Create(address);
+            using ( HttpWebResponse response = ( HttpWebResponse ) request.GetResponse() )
+            {
+                try
+                {
+                    if ( response.StatusCode != HttpStatusCode.OK )
+                    {
+                        return null;
+                    }
+
+                    // Fetch html document
+                    Stream receiveStream = response.GetResponseStream();
+
+                    using (StreamReader streamReader = new StreamReader(receiveStream))
+                    {
+                        using (JsonTextReader reader = new JsonTextReader(streamReader))
+                        {
+                            JObject o2 = (JObject)JToken.ReadFrom(reader);
+                            var players = o2["players"];
+                            var data = players?["data"]?[0];
+                            var id = data?["id"];
+
+                            if (id == null)
+                            {
+                                Trace.WriteLine("No match for " + name + ", born " + birthday.ToString("yyyy-MM-dd"));
+                            }
+                            return id?.ToString();
+
+                        }
+                    }
+
+
+
+                }
+                finally
+                {
+                    response.Close();
+                }
+            }
+            return null;
         }
 
 

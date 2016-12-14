@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace GM.Model
 {
@@ -136,12 +137,25 @@ namespace GM.Model
         /// </summary>
         public string Height { get; protected set; }
 
+        public string EliteProspectsId { get; protected set; }
+
         public void SetAdditionals (AdditionalPlayerInfo additionalPlayerInfo)
         {
             Country = additionalPlayerInfo.Country;
             Birthday = additionalPlayerInfo.Birthday;
             Weight = additionalPlayerInfo.Weight;
             Height = additionalPlayerInfo.Height;
+
+            Values.Add("Country", Country);
+            Values.Add("Birthday", Birthday.ToString(CultureInfo.CurrentCulture));
+            Values.Add("Weight", Weight);
+            Values.Add("Height", Height);
+        }
+
+        public void SetEliteProspectsId (string id)
+        {
+            EliteProspectsId = id;
+            Values.Add("EliteProspectsId", EliteProspectsId);
         }
     }
 }

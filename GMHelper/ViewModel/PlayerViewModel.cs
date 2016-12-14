@@ -116,6 +116,11 @@ namespace GM.ViewModel
         public string Weight => _player.Weight;
 
         /// <summary>
+        ///     The identifier for the EliteProspects website
+        /// </summary>
+        public string EliteProspectsId => _player.EliteProspectsId;
+
+        /// <summary>
         ///     The date of birth
         /// </summary>
         public DateTime Birthday => _player.Birthday;

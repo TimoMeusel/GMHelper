@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GM.Model
@@ -95,6 +96,28 @@ namespace GM.Model
             int salaryValue;
             int.TryParse(salaryText, out salaryValue);
             Salary = salaryValue;
+
+            string country;
+            values.TryGetValue("Country", out country);
+            Country = country;
+
+            string height;
+            values.TryGetValue("Height", out height);
+            Height = height;
+
+            string weight;
+            values.TryGetValue("Weight", out weight);
+            Weight = weight;
+
+            string birthdayText;
+            values.TryGetValue("Birthday", out birthdayText);
+            DateTime birthday;
+            DateTime.TryParse(birthdayText, out birthday);
+            Birthday = birthday;
+
+            string eliteProspectsId;
+            values.TryGetValue("EliteProspectsId", out eliteProspectsId);
+            EliteProspectsId = eliteProspectsId;
         }
 
         /// <summary>

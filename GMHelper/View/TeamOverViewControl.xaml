@@ -3,10 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GM.View">
+             xmlns:local="clr-namespace:GM.View"
+             xmlns:awe="http://schemas.awesomium.com/winfx">
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="5"/>
+      <ColumnDefinition Width="2*" />
+      <ColumnDefinition Width="5"/>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <ListView x:Name="TeamList"
@@ -15,12 +19,19 @@
               Grid.Column="0"
               SelectedIndex="0"
               MinWidth="100"/>
-    <Grid Grid.Column="1">
+
+    <GridSplitter Grid.Column="1"
+                  Width="5"
+                  HorizontalAlignment="Stretch"
+                  Background="DarkGray"/>
+    
+    <Grid Grid.Column="2">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
+      
       <TextBlock DataContext="{Binding ElementName=TeamList, Path=SelectedValue}"
                  Text="{Binding HeaderText}"
                  TextAlignment="Center"
@@ -98,6 +109,8 @@
       <DataGrid  Grid.Row="2"
                  AutoGenerateColumns="False"
                  ItemsSource="{Binding ElementName=TeamList, Path=SelectedValue.Goalies}"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"
                  MinHeight="100">
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name"
@@ -153,5 +166,27 @@
         </DataGrid.Columns>
       </DataGrid>
     </Grid>
+
+    <GridSplitter Grid.Column="3"
+                  Width="5"
+                  HorizontalAlignment="Stretch"
+                  Background="DarkGray"/>
+
+    <!-- EliteProspects plugin -->
+    <Grid Grid.Column="4">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <TextBlock Grid.Row="0"
+                 x:Name="UrlTextBlock"
+                 HorizontalAlignment="Stretch"
+                 TextAlignment="Center"
+                 FontWeight="Bold"
+                 Text="{Binding SelectedPlayer.Name}"/>
+      <awe:WebControl Grid.Row="1"
+                      Source="{Binding Url}"/>
+    </Grid>
+    
   </Grid>
 </UserControl>
