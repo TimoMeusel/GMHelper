@@ -6,4 +6,4 @@ Next ToDo's
 ## Line editor
 ## Filtering data
 ## Overall value (Player (custom rating), Lines)
-## Waiver state
+## NFHL Stats & Waiver state
