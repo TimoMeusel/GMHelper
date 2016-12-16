@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\FarmTeam.cs" />
     <Compile Include="Model\AdditionalPlayerInfo.cs" />
+    <Compile Include="Model\PlayerIdentifier.cs" />
     <Compile Include="Persistence\CsvImport.cs" />
     <Compile Include="Persistence\CsvExport.cs" />
     <Compile Include="ViewModel\AllGoaliesOverviewViewModel.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="ViewModel\CsvExportCommand.cs" />
     <Compile Include="ViewModel\CsvImportCommand.cs" />
     <Compile Include="ViewModel\GoalieViewModel.cs" />
+    <Compile Include="ViewModel\EliteProspectsCommand.cs" />
     <Compile Include="ViewModel\OverviewViewModel.cs" />
     <Compile Include="ViewModel\PlayerViewModel.cs" />
     <Compile Include="ViewModel\SkaterViewModel.cs" />
@@ -134,7 +136,7 @@
     <Compile Include="ViewModel\BaseCommand.cs" />
     <Compile Include="ViewModel\GrabCommand.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="ViewModel\TeamRegistry.cs" />
+    <Compile Include="ViewModel\TeamFactory.cs" />
     <Compile Include="ViewModel\TeamsOverviewViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

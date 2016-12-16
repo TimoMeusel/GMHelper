@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using GM.Model;
 using GM.Persistence;
 using Microsoft.Win32;
 
@@ -12,9 +13,7 @@ namespace GM.ViewModel
         /// </summary>
         public override bool CanExecute(object parameter)
         {
-            var viewModel = parameter as MainWindowViewModel;
-            var players = viewModel?.AllSkatersOverviewViewModel?.Players;
-            return players != null && players.Any();
+            return DataGrabber.Players != null && DataGrabber.Players.Any();
         }
 
         /// <summary>
@@ -22,11 +21,9 @@ namespace GM.ViewModel
         /// </summary>
         protected override void ExecuteInternal(object parameter)
         {
-            var viewModel = parameter as MainWindowViewModel;
             CsvExport export = new CsvExport();
 
-            var dialog = new SaveFileDialog();
-            dialog.Filter = "*CSV|*.csv";
+            var dialog = new SaveFileDialog { Filter = "*CSV|*.csv" };
 
             // if cancel has been pressed, the dialog returns false
             if ( dialog.ShowDialog() == false )
@@ -36,7 +33,7 @@ namespace GM.ViewModel
 
             string path = dialog.FileName;
 
-            export.Export(viewModel, path);
+            export.Export(path);
         }
     }
 }

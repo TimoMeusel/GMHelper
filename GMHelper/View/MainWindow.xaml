@@ -4,15 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="GMHelper" Height="700" Width="1100">
+        Title="GMHelper"
+        Height="700"
+        Width="1100">
     <Window.Resources>
-        <ResourceDictionary Source="DataTemplates.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="DataTemplates.xaml"/>
     </Window.Resources>
     <DockPanel LastChildFill="True">
-        <Menu  DockPanel.Dock="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="Grab Data"
+        <Menu DockPanel.Dock="Top">
+          <Menu.ItemsPanel>
+            <ItemsPanelTemplate>
+              <DockPanel HorizontalAlignment="Stretch"/>
+            </ItemsPanelTemplate>
+          </Menu.ItemsPanel>
+            <MenuItem Header="Data">
+                <MenuItem Header="Fetch Player Data"
                           Command="{Binding GrabCommand}"/>
+                <Separator/>
+                <MenuItem Header="Update EliteProspectsId"
+                          Command="{Binding EliteProspectsCommand}"/>
                 <Separator/>
                 <MenuItem Header="CSV Export ..."
                           Command="{Binding CsvExportCommand}"
@@ -31,9 +41,14 @@
                 <MenuItem Header="Farm Teams"
                           Command="{Binding ShowFarmTeamsCommand}"/>
             </MenuItem>
+            <ProgressBar Value="{Binding Progress}" 
+                         Width="200"
+                         Minimum="0"
+                         Maximum="100"
+                         HorizontalAlignment="Right"
+                         DockPanel.Dock="Right"/>
         </Menu>
-        
         <ContentControl Content="{Binding Current}"/>
     </DockPanel>
-    
+
 </Window>

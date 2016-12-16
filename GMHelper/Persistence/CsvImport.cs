@@ -7,7 +7,7 @@ namespace GM.Persistence
 {
     public class CsvImport
     {
-        public IEnumerable<Player> Load (string path)
+        public List<Player> Load (string path)
         {
             List<Skater> skaters = new List<Skater>();
             List<Goalie> goalies = new List<Goalie>();

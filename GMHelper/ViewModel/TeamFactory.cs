@@ -4,16 +4,16 @@ using GM.Model;
 
 namespace GM.ViewModel
 {
-    public class TeamRegistry
+    public class TeamFactory
     {
         public List<TeamViewModel> Teams { get; private set; }
         public List<SkaterViewModel> AllSkaters { get; private set; }
         public List<GoalieViewModel> AllGoalies { get; private set; }
 
-        public List<TeamViewModel> CreateTeams(IEnumerable<Player> players)
+        public void CreateTeams()
         {
             Dictionary<Player, Team> teamMap = new Dictionary<Player, Team>();
-            foreach ( Player player in players )
+            foreach ( Player player in DataGrabber.Players)
             {
                 teamMap.Add(player, player.Team);
             }
@@ -33,9 +33,7 @@ namespace GM.ViewModel
 
             AllSkaters = teamMap.Keys.Where(p => p is Skater).Cast<Skater>().Select(s => new SkaterViewModel(s)).ToList();
             AllGoalies = teamMap.Keys.Where(p => p is Goalie).Cast<Goalie>().Select(g => new GoalieViewModel(g)).ToList();
-
             Teams = teamsViewModels;
-            return teamsViewModels;
         }
     }
 }

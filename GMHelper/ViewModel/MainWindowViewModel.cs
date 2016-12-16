@@ -5,6 +5,7 @@ namespace GM.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private ViewModelBase _current;
+        private double _progress;
 
         public MainWindowViewModel()
         {
@@ -12,6 +13,7 @@ namespace GM.ViewModel
             AllSkatersOverviewViewModel = new AllSkatersOverviewViewModel();
             AllGoaliesOverviewViewModel = new AllGoaliesOverviewViewModel();
             GrabCommand = new GrabCommand(this);
+            EliteProspectsCommand = new EliteProspectsCommand(this);
             CsvExportCommand = new CsvExportCommand();
             CsvImportCommand = new CsvImportCommand();
 
@@ -24,6 +26,7 @@ namespace GM.ViewModel
         }
 
         public ICommand GrabCommand { get; private set; }
+        public ICommand EliteProspectsCommand { get; private set; }
         public ICommand CsvExportCommand { get; private set; }
         public ICommand CsvImportCommand { get; private set; }
         public ICommand ShowProTeamsCommand { get; private set; }
@@ -45,7 +48,17 @@ namespace GM.ViewModel
                 OnPropertyChanged("Current");
             }
         }
-        
+
+        public double Progress
+        {
+            get { return _progress; }
+            set
+            {
+                _progress = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void ShowFarmTeams(object o)
         {
             TeamsOverviewViewModel.ShowPro = false;

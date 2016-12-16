@@ -1,34 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Resources;
 using System.Text;
 using GM.Model;
-using GM.ViewModel;
 
 namespace GM.Persistence
 {
     public class CsvExport
     {
-        public void Export (MainWindowViewModel mainWindowViewModel, string path)
+        public void Export (string path)
         {
-            if (mainWindowViewModel == null || mainWindowViewModel.AllGoaliesOverviewViewModel == null ||
-                mainWindowViewModel.AllSkatersOverviewViewModel == null || mainWindowViewModel.TeamsOverviewViewModel == null)
-            {
-                return;
-            }
-
             StringBuilder builder = new StringBuilder();
             
-            var allSkaters = mainWindowViewModel.AllSkatersOverviewViewModel.Players.ToList();
-            var allGoalies = mainWindowViewModel.AllGoaliesOverviewViewModel.Players.ToList();
+            var allSkaters = DataGrabber.Players.Where(s => s is Skater).Cast<Skater>().ToList();
+            var allGoalies = DataGrabber.Players.Where(s => s is Goalie).Cast<Goalie>().ToList();
 
-            mainWindowViewModel.TeamsOverviewViewModel.ShowPro = true;
-            var allPros = mainWindowViewModel.TeamsOverviewViewModel.Teams.ToList();
+            var allPros = DataGrabber.Teams.Where(t => !(t is FarmTeam)).ToList();
+            var allFarms = DataGrabber.Teams.Where(t => t is FarmTeam).ToList();
 
-            mainWindowViewModel.TeamsOverviewViewModel.ShowPro = false;
-            var allFarms = mainWindowViewModel.TeamsOverviewViewModel.Teams.ToList();
-            
             string skaters = AppendPlayers(allSkaters);
             string goalies = AppendGoalies(allGoalies);
             string proTeams = AppendTeams(allPros);
@@ -45,7 +34,7 @@ namespace GM.Persistence
             File.WriteAllText(path, builder.ToString());
         }
 
-        private static string AppendPlayers (List<SkaterViewModel> allSkaters)
+        private static string AppendPlayers (List<Skater> allSkaters)
         {
             StringBuilder builder = new StringBuilder();
             List<string> headers = allSkaters.First().Values.Keys.ToList().ToList();
@@ -65,7 +54,7 @@ namespace GM.Persistence
             return builder.ToString();
         }
 
-        private static string AppendGoalies (List<GoalieViewModel> allGoalies)
+        private static string AppendGoalies (List<Goalie> allGoalies)
         {
             StringBuilder builder = new StringBuilder();
             List<string> headers = allGoalies.First().Values.Keys.ToList().ToList();
@@ -84,7 +73,7 @@ namespace GM.Persistence
             return builder.ToString();
         }
 
-        private static string AppendTeams (List<TeamViewModel> teams)
+        private static string AppendTeams (List<Team> teams)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -93,22 +82,25 @@ namespace GM.Persistence
             return builder.ToString();
         }
 
-        private static string AppendTeam (List<TeamViewModel> teams)
+        private static string AppendTeam (List<Team> teams)
         {
             StringBuilder teamBuilder = new StringBuilder();
-            foreach (var teamViewModel in teams)
+            foreach (var team in teams)
             {
-                teamBuilder.AppendLine(teamViewModel.TeamName);
-                teamBuilder.Append(AppendPlayers(teamViewModel.Skaters.ToList()));
-                teamBuilder.Append(AppendGoalies(teamViewModel.Goalies.ToList()));
+                teamBuilder.AppendLine(team.Name);
+
+                var players = DataGrabber.Players.Where(p => p.Team.Equals(team)).ToList();
+
+                teamBuilder.Append(AppendPlayers(players.Where(p => p is Skater).Cast<Skater>().ToList()));
+                teamBuilder.Append(AppendGoalies(players.Where(p => p is Goalie).Cast<Goalie>().ToList()));
                 teamBuilder.AppendLine(string.Empty);
             }
             return teamBuilder.ToString();
         }
 
-        private static string GenerateTeamDisplay(PlayerViewModel player)
+        private static string GenerateTeamDisplay(Player player)
         {
-            var teamDisplay = string.Empty;
+            string teamDisplay;
             var farmTeam = player.Team as FarmTeam;
             if ( farmTeam != null )
             {

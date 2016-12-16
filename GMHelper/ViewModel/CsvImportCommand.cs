@@ -1,4 +1,4 @@
-﻿using GM.Persistence;
+﻿using GM.Model;
 using Microsoft.Win32;
 
 namespace GM.ViewModel
@@ -25,15 +25,14 @@ namespace GM.ViewModel
                 
             string path = dialog.FileName;
 
-            var csvImport = new CsvImport();
-            var players = csvImport.Load(path);
+            DataGrabber.LoadFromCsv(path);
 
-
-            var teamRegistry = new TeamRegistry();
-            var teams = teamRegistry.CreateTeams(players);
+            var teamFactory = new TeamFactory();
+            teamFactory.CreateTeams();
+            var teams = teamFactory.Teams;
             viewModel.TeamsOverviewViewModel.Teams = teams;
-            viewModel.AllSkatersOverviewViewModel.Players = teamRegistry.AllSkaters;
-            viewModel.AllGoaliesOverviewViewModel.Players = teamRegistry.AllGoalies;
+            viewModel.AllSkatersOverviewViewModel.Players = teamFactory.AllSkaters;
+            viewModel.AllGoaliesOverviewViewModel.Players = teamFactory.AllGoalies;
         }
     }
 }

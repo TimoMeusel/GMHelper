@@ -1,18 +1,17 @@
-﻿using System;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
+using System.Net.Http;
+using System.Threading.Tasks;
+using GM.Persistence;
 using HtmlAgilityPack;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace GM.Model
 {
     /// <summary>
-    ///     
+    ///     Grabs all relevant data from the different websites
     /// </summary>
     internal static class DataGrabber
     {
@@ -26,91 +25,78 @@ namespace GM.Model
         private const string XPathForGoalies = "//table[@class='basictablesorter STHSRoster_GoaliesTable']/tr";
         private const string XPathForGoalieHeaders = "//table[@class='basictablesorter STHSRoster_GoaliesTable']/thead/tr/th";
 
+        public static ConcurrentQueue<Player> Players { get; private set; }
+        public static IReadOnlyList<Team> Teams { get; private set; }
 
-        public static IEnumerable<Player> GrabPlayers ()
+        public static void GrabPlayers ()
         {
             var additionals = GrabPlayersAdditionalInfo();
             var players = GrabPlayerBasicInfo().ToList();
-            
+
             var query = from player in players
-                              from info in additionals
-                                  .Where(info => info.Name == player.Name && info.Franchise.Equals(player.Franchise))
-                              select new { player, info };
-            
-            
+                        from info in additionals
+                            .Where(info => info.Name == player.Name && info.Franchise.Equals(player.Franchise))
+                        select new { player, info };
+
+            query = query.ToList();
 
             var result = new List<Player>();
             foreach (var match in query)
             {
                 var player = match.player;
-
                 player.SetAdditionals(match.info);
-                player.SetEliteProspectsId(GetEliteProspectsId(player.Name, player.Birthday));
-
                 result.Add(player);
             }
-            
-            return result;
+
+            Update(result);
         }
 
-        private static string GetEliteProspectsId (string name, DateTime birthday)
+        private static void Update (List<Player> players)
         {
-            var address = string.Format("http://api.eliteprospects.com/beta/search?type=player&q={0}&filter=dateOfBirth={1}",
-                                        name,
-                                        birthday.ToString("yyyy-MM-dd"));
-
-            HttpWebRequest request = ( HttpWebRequest ) WebRequest.Create(address);
-            using ( HttpWebResponse response = ( HttpWebResponse ) request.GetResponse() )
-            {
-                try
-                {
-                    if ( response.StatusCode != HttpStatusCode.OK )
-                    {
-                        return null;
-                    }
-
-                    // Fetch html document
-                    Stream receiveStream = response.GetResponseStream();
-
-                    using (StreamReader streamReader = new StreamReader(receiveStream))
-                    {
-                        using (JsonTextReader reader = new JsonTextReader(streamReader))
-                        {
-                            JObject o2 = (JObject)JToken.ReadFrom(reader);
-                            var players = o2["players"];
-                            var data = players?["data"]?[0];
-                            var id = data?["id"];
-
-                            if (id == null)
-                            {
-                                Trace.WriteLine("No match for " + name + ", born " + birthday.ToString("yyyy-MM-dd"));
-                            }
-                            return id?.ToString();
-
-                        }
-                    }
-
-
-
-                }
-                finally
-                {
-                    response.Close();
-                }
-            }
-            return null;
+            Players = new ConcurrentQueue<Player>(players);
+            Teams = Players.Select(p => p.Team).Distinct().ToList();
         }
 
+        public static void GetEliteProspectsId ()
+        {
+            var playersAdresses = new ConcurrentDictionary<Player, string>();
+            Parallel.ForEach(Players,
+                             player =>
+                                 playersAdresses.TryAdd(player,
+                                                        $"http://api.eliteprospects.com/beta/search?type=player&q={player.Name}&filter=dateOfBirth={player.Birthday.ToString("yyyy-MM-dd")}"));
+            
+            Parallel.ForEach(playersAdresses,new ParallelOptions { MaxDegreeOfParallelism = 10 },
+                             kvp =>
+                             {
+                                 using (var client = new HttpClient())
+                                 {
+                                     var response = client.GetStringAsync(kvp.Value).Result;
+                                     var obj = JToken.Parse(response);
+                                     var players = obj["players"];
+                                     var data = players?["data"]?[0];
+                                     var id = data?["id"];
+                                     kvp.Key.SetEliteProspectsId(id?.ToString());
+                                 }
+                             });
+
+        }
+
+        public static void LoadFromCsv (string path)
+        {
+            var csvImport = new CsvImport();
+            var players = csvImport.Load(path);
+            Update(players);
+        }
 
         public static IEnumerable<AdditionalPlayerInfo> GrabPlayersAdditionalInfo ()
         {
             var additionalsDoc = LoadRawData(AdditionalsAddress);
 
-            List<AdditionalPlayerInfo> playersInfos = new List<AdditionalPlayerInfo>();
-            List<string> headers = new List<string>();
-            foreach ( HtmlNode headerNode in additionalsDoc.DocumentNode.SelectNodes(XPathForAdditionalsHeaders) )
+            var playersInfos = new List<AdditionalPlayerInfo>();
+            var headers = new List<string>();
+            foreach (var headerNode in additionalsDoc.DocumentNode.SelectNodes(XPathForAdditionalsHeaders))
             {
-                if ( headers.Contains(headerNode.InnerHtml) )
+                if (headers.Contains(headerNode.InnerHtml))
                 {
                     break;
                 }
@@ -118,15 +104,14 @@ namespace GM.Model
             }
 
             // create player info list
-            foreach ( HtmlNode node in additionalsDoc.DocumentNode.SelectNodes(XPathForAdditionals) )
+            foreach (var node in additionalsDoc.DocumentNode.SelectNodes(XPathForAdditionals))
             {
-
-                if ( node.ChildNodes.Count != headers.Count )
+                if (node.ChildNodes.Count != headers.Count)
                 {
                     continue;
                 }
 
-                AdditionalPlayerInfo playerInfo = CreatePlayerInfo(headers, node);
+                var playerInfo = CreatePlayerInfo(headers, node);
                 playersInfos.Add(playerInfo);
             }
 
@@ -136,26 +121,26 @@ namespace GM.Model
         /// <summary>
         ///     Grabs all players from the defined address.
         /// </summary>
-        private static IEnumerable<Player> GrabPlayerBasicInfo()
+        private static IEnumerable<Player> GrabPlayerBasicInfo ()
         {
             var basicDoc = LoadRawData(BasicsAddress);
 
-            List<Player> players = new List<Player>();
+            var players = new List<Player>();
 
-            List<string> skaterHeaders = new List<string>();
-            foreach ( HtmlNode skaterHeaderNode in basicDoc.DocumentNode.SelectNodes(XPathForSkaterHeaders) )
+            var skaterHeaders = new List<string>();
+            foreach (var skaterHeaderNode in basicDoc.DocumentNode.SelectNodes(XPathForSkaterHeaders))
             {
-                if ( skaterHeaders.Contains(skaterHeaderNode.InnerHtml) )
+                if (skaterHeaders.Contains(skaterHeaderNode.InnerHtml))
                 {
                     break;
                 }
                 skaterHeaders.Add(skaterHeaderNode.InnerHtml);
             }
 
-            List<string> goalieHeaders = new List<string>();
-            foreach ( HtmlNode goalieHeaderNode in basicDoc.DocumentNode.SelectNodes(XPathForGoalieHeaders) )
+            var goalieHeaders = new List<string>();
+            foreach (var goalieHeaderNode in basicDoc.DocumentNode.SelectNodes(XPathForGoalieHeaders))
             {
-                if ( goalieHeaders.Contains(goalieHeaderNode.InnerHtml) )
+                if (goalieHeaders.Contains(goalieHeaderNode.InnerHtml))
                 {
                     break;
                 }
@@ -163,16 +148,16 @@ namespace GM.Model
             }
 
             // create skater list
-            foreach ( HtmlNode skaterNode in basicDoc.DocumentNode.SelectNodes(XPathForSkaters) )
+            foreach (var skaterNode in basicDoc.DocumentNode.SelectNodes(XPathForSkaters))
             {
-                Skater skater = CreateSkater(skaterHeaders, skaterNode);
+                var skater = CreateSkater(skaterHeaders, skaterNode);
                 players.Add(skater);
             }
 
             // create goalie list
-            foreach ( HtmlNode goalieNode in basicDoc.DocumentNode.SelectNodes(XPathForGoalies) )
+            foreach (var goalieNode in basicDoc.DocumentNode.SelectNodes(XPathForGoalies))
             {
-                Goalie goalie = CreateGoalie(goalieHeaders, goalieNode);
+                var goalie = CreateGoalie(goalieHeaders, goalieNode);
                 players.Add(goalie);
             }
 
@@ -181,9 +166,9 @@ namespace GM.Model
 
         private static HtmlDocument LoadRawData (string address)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
-            HtmlDocument basicDoc = new HtmlDocument();
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            var request = (HttpWebRequest)WebRequest.Create(address);
+            var basicDoc = new HtmlDocument();
+            using (var response = (HttpWebResponse)request.GetResponse())
             {
                 try
                 {
@@ -193,7 +178,7 @@ namespace GM.Model
                     }
 
                     // Fetch html document
-                    Stream receiveStream = response.GetResponseStream();
+                    var receiveStream = response.GetResponseStream();
                     basicDoc.Load(receiveStream);
                 }
                 finally
@@ -206,40 +191,40 @@ namespace GM.Model
 
         #region Private Methods
 
-        private static Goalie CreateGoalie(List<string> headers, HtmlNode goalieNode)
+        private static Goalie CreateGoalie (List<string> headers, HtmlNode goalieNode)
         {
-            Dictionary<string, string> values = ExtractValues(headers, goalieNode);
+            var values = ExtractValues(headers, goalieNode);
 
-            Team team = GetTeam(goalieNode);
+            var team = GetTeam(goalieNode);
             return new Goalie(team, values);
         }
 
-        private static Skater CreateSkater(List<string> headers, HtmlNode skaterNode)
+        private static Skater CreateSkater (List<string> headers, HtmlNode skaterNode)
         {
-            Dictionary<string, string> values = ExtractValues(headers, skaterNode);
-            Team team = GetTeam(skaterNode);
+            var values = ExtractValues(headers, skaterNode);
+            var team = GetTeam(skaterNode);
             return new Skater(team, values);
         }
 
         private static AdditionalPlayerInfo CreatePlayerInfo (List<string> headers, HtmlNode node)
         {
-            Dictionary<string, string> values = ExtractValues(headers, node);
-            Team team = GetFranchise(node);
+            var values = ExtractValues(headers, node);
+            var team = GetFranchise(node);
             return new AdditionalPlayerInfo(team, values);
         }
 
         private static Dictionary<string, string> ExtractValues (List<string> headers, HtmlNode node)
         {
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            
+            var values = new Dictionary<string, string>();
+
             for (int i = 0; i < headers.Count; i++)
             {
-                values[headers.ElementAt(i)] = node.SelectSingleNode("td[" + (i+1) + "]").InnerHtml;
+                values[headers.ElementAt(i)] = node.SelectSingleNode("td[" + (i + 1) + "]").InnerHtml;
             }
             return values;
         }
 
-        private static Team GetTeam(HtmlNode node)
+        private static Team GetTeam (HtmlNode node)
         {
             var divNode = node.Ancestors("div").Last();
             string teamName = divNode.Attributes["id"].Value.Split('_').Last();
@@ -267,7 +252,7 @@ namespace GM.Model
             }
         }
 
-        private static Team GetFranchise(HtmlNode node)
+        private static Team GetFranchise (HtmlNode node)
         {
             var divNode = node.Ancestors("div").Last();
             string teamName = divNode.Attributes["id"].Value.Split('_').Last();

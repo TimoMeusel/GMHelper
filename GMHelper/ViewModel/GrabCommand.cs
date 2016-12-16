@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using GM.Model;
@@ -38,15 +37,16 @@ namespace GM.ViewModel
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 // load the players from the website
-                var players =
-                    new ObservableCollection<Player>(
-                        DataGrabber.GrabPlayers());
 
-                var teamRegistry = new TeamRegistry();
-                var teams = teamRegistry.CreateTeams(players);
+                DataGrabber.GrabPlayers();
+
+                var teamFactory = new TeamFactory();
+                teamFactory.CreateTeams();
+                var teams = teamFactory.Teams;
+
                 _mainWindowViewModel.TeamsOverviewViewModel.Teams = teams;
-                _mainWindowViewModel.AllSkatersOverviewViewModel.Players = teamRegistry.AllSkaters;
-                _mainWindowViewModel.AllGoaliesOverviewViewModel.Players = teamRegistry.AllGoalies;
+                _mainWindowViewModel.AllSkatersOverviewViewModel.Players = teamFactory.AllSkaters;
+                _mainWindowViewModel.AllGoaliesOverviewViewModel.Players = teamFactory.AllGoalies;
             }
             catch (Exception e)
             {

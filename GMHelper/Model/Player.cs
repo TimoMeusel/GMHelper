@@ -155,7 +155,10 @@ namespace GM.Model
         public void SetEliteProspectsId (string id)
         {
             EliteProspectsId = id;
-            Values.Add("EliteProspectsId", EliteProspectsId);
+            if (!Values.ContainsKey("EliteProspectsId"))
+            {
+                Values.Add("EliteProspectsId", EliteProspectsId);
+            }
         }
     }
 }
