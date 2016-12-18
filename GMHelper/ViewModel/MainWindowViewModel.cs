@@ -56,8 +56,11 @@ namespace GM.ViewModel
             {
                 _progress = value;
                 OnPropertyChanged();
+                OnPropertyChanged("ProgressVisibility");
             }
         }
+
+        public bool ProgressVisibility => _progress > 0;
 
         private void ShowFarmTeams(object o)
         {

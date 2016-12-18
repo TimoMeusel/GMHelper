@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:GM.ViewModel"
                     xmlns:view="clr-namespace:GM.View">
-
     <DataTemplate DataType="{x:Type viewModels:TeamsOverviewViewModel}">
         <view:TeamOverviewControl/>
     </DataTemplate>

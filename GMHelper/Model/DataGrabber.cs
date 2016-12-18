@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +16,10 @@ namespace GM.Model
     /// </summary>
     internal static class DataGrabber
     {
+        private static ConcurrentDictionary<Player, string> _playersIds = new ConcurrentDictionary<Player, string>();
+        private static ConcurrentBag<Player> _players = new ConcurrentBag<Player>();
+        private static IReadOnlyList<Team> _teams = new List<Team>();
+
         private const string BasicsAddress = "http://nfhl.eu.dd25712.kasserver.com/2/NFHL-ProTeamRoster.html";
         private const string AdditionalsAddress = "http://nfhl.eu.dd25712.kasserver.com/2/NFHL-ProTeamPlayersInfo.html";
         private const string XPathForAdditionals = "//table[@class='basictablesorter']/tr";
@@ -25,8 +30,23 @@ namespace GM.Model
         private const string XPathForGoalies = "//table[@class='basictablesorter STHSRoster_GoaliesTable']/tr";
         private const string XPathForGoalieHeaders = "//table[@class='basictablesorter STHSRoster_GoaliesTable']/thead/tr/th";
 
-        public static ConcurrentQueue<Player> Players { get; private set; }
-        public static IReadOnlyList<Team> Teams { get; private set; }
+        public static ConcurrentBag<Player> Players
+        {
+            get { return _players; }
+            private set { _players = value; }
+        }
+
+        public static ConcurrentDictionary<Player, string> PlayersIds
+        {
+            get { return _playersIds; }
+            private set { _playersIds = value; }
+        }
+
+        public static IReadOnlyList<Team> Teams
+        {
+            get { return _teams; }
+            private set { _teams = value; }
+        }
 
         public static void GrabPlayers ()
         {
@@ -53,32 +73,55 @@ namespace GM.Model
 
         private static void Update (List<Player> players)
         {
-            Players = new ConcurrentQueue<Player>(players);
+            Players = new ConcurrentBag<Player>(players);
             Teams = Players.Select(p => p.Team).Distinct().ToList();
         }
 
-        public static void GetEliteProspectsId ()
+        public static Task GetEliteProspectsId ()
         {
-            var playersAdresses = new ConcurrentDictionary<Player, string>();
-            Parallel.ForEach(Players,
-                             player =>
-                                 playersAdresses.TryAdd(player,
-                                                        $"http://api.eliteprospects.com/beta/search?type=player&q={player.Name}&filter=dateOfBirth={player.Birthday.ToString("yyyy-MM-dd")}"));
-            
-            Parallel.ForEach(playersAdresses,new ParallelOptions { MaxDegreeOfParallelism = 10 },
-                             kvp =>
-                             {
-                                 using (var client = new HttpClient())
-                                 {
-                                     var response = client.GetStringAsync(kvp.Value).Result;
-                                     var obj = JToken.Parse(response);
-                                     var players = obj["players"];
-                                     var data = players?["data"]?[0];
-                                     var id = data?["id"];
-                                     kvp.Key.SetEliteProspectsId(id?.ToString());
-                                 }
-                             });
+            return new Task(() =>
+                            {
+                                PlayersIds = new ConcurrentDictionary<Player, string>();
 
+                                var playersAdresses = new ConcurrentDictionary<Player, string>();
+                                Parallel.ForEach(Players,
+                                                 player =>
+                                                     playersAdresses.TryAdd(player,
+                                                                            $"http://api.eliteprospects.com/beta/search?type=player&q={player.Name}&filter=dateOfBirth={player.Birthday.ToString("yyyy-MM-dd")}"));
+
+
+                                Parallel.ForEach(playersAdresses,
+                                                 new ParallelOptions { MaxDegreeOfParallelism = 10 },
+                                                 kvp =>
+                                                 {
+                                                     using (var client = new HttpClient())
+                                                     {
+                                                         var response = client.GetStringAsync(kvp.Value).Result;
+                                                         var obj = JToken.Parse(response);
+                                                         var players = obj["players"];
+                                                         var data = players?["data"]?[0];
+                                                         var id = data?["id"];
+                                                         PlayersIds.TryAdd(kvp.Key, id?.ToString());
+                                                     }
+                                                 });
+
+                                using ( var stream = File.Create("Resources/Ids.csv") )
+                                {
+                                    using ( var writer = new StreamWriter(stream) )
+                                    {
+                                        foreach ( var tuple in PlayersIds )
+                                        {
+                                            writer.WriteLine("{0},{1},{2}", tuple.Key.Name, tuple.Key.Birthday.ToString("yyyy-MM-dd"), tuple.Value);
+                                        }
+                                    }
+                                }
+
+                                Parallel.ForEach(Players,
+                                                 p =>
+                                                 {
+                                                     p.SetEliteProspectsId(PlayersIds[p]);
+                                                 });
+                            });
         }
 
         public static void LoadFromCsv (string path)

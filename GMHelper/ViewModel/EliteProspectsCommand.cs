@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +23,7 @@ namespace GM.ViewModel
             _bgWorker.DoWork += BgWorkerOnDoWork;
             _bgWorker.RunWorkerCompleted += BgWorkerOnRunWorkerCompleted;
             _bgWorker.ProgressChanged += BgWorkerOnProgressChanged;
+            _bgWorker.WorkerReportsProgress = true;
         }
 
         private void BgWorkerOnRunWorkerCompleted (object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
@@ -51,7 +51,26 @@ namespace GM.ViewModel
         {
             try
             {
-                _bgWorker.RunWorkerAsync();
+                var fetchTask = DataGrabber.GetEliteProspectsId();
+                fetchTask.Start();
+
+                var updateTask = new Task(() =>
+                                          {
+
+                                              do
+                                              {
+                                                  int total = DataGrabber.Players.Count;
+                                                  int haveId =
+                                                      DataGrabber.PlayersIds.Values.Count(v => !string.IsNullOrWhiteSpace(v));
+                                                  var ratio = (double)haveId / total * 100;
+                                                  _mainWindowViewModel.Progress = ratio;
+                                              }
+                                              while (!fetchTask.IsCompleted);
+                                              _mainWindowViewModel.Progress = 0;
+                                          });
+                updateTask.Start();
+
+
             }
             catch ( Exception e )
             {
@@ -61,18 +80,7 @@ namespace GM.ViewModel
 
         private void BgWorkerOnDoWork (object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            var task = new Task(DataGrabber.GetEliteProspectsId);
-            task.Start();
 
-            do
-            {
-                int total = DataGrabber.Players.Count;
-                int haveId = DataGrabber.Players.Count(p => !string.IsNullOrWhiteSpace(p.EliteProspectsId));
-                var ratio = (double)haveId / total * 100;
-                _bgWorker.WorkerReportsProgress = true;
-                _bgWorker.ReportProgress((int)ratio);
-            }
-            while (!task.IsCompleted);
         }
     }
 }

@@ -46,7 +46,19 @@
                          Minimum="0"
                          Maximum="100"
                          HorizontalAlignment="Right"
-                         DockPanel.Dock="Right"/>
+                         DockPanel.Dock="Right">
+              <ProgressBar.Style>
+                <Style TargetType="ProgressBar">
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Progress}"
+                                 Value="0">
+                      <Setter Property="Visibility"
+                              Value="Collapsed"/>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </ProgressBar.Style>
+              </ProgressBar>
         </Menu>
         <ContentControl Content="{Binding Current}"/>
     </DockPanel>
